@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1077990734139",
+    "project_id": "walls-1809",
+    "storage_bucket": "walls-1809.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077990734139:android:f92e86afc5d940a50ddf1e",
+        "android_client_info": {
+          "package_name": "com.example.wallpaper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4poaj-EXSOVkvQaUCPzrsWKQWWbfyVmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
