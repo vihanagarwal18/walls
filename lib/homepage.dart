@@ -82,11 +82,9 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'firebase_Storage_services.dart';
-// ignore_for_file: prefer_const_constructors
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -107,14 +105,14 @@ class _HomepageState extends State<Homepage> {
         gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
         ),
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(18),
-            child: InkWell(
-              onTap: () {
-                _navigateToFullScreenImage(context, index);
-              },
+        itemBuilder: (context, index) => GestureDetector(
+          onTap: () {
+            _showFullScreenImage(context, (index + 1).toString() + '.png');
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(18),
               child: FutureBuilder(
                 future: _getImage(context, (index + 1).toString() + '.png'),
                 builder: (context, snapshot) {
@@ -161,7 +159,7 @@ class _HomepageState extends State<Homepage> {
       );
       return Image.network(
         imageUrl,
-        fit: BoxFit.scaleDown,
+        fit: BoxFit.cover,
       );
     } catch (e) {
       print('Error loading image: $e');
@@ -169,54 +167,81 @@ class _HomepageState extends State<Homepage> {
     }
   }
 
-  void _navigateToFullScreenImage(BuildContext context, int index) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => FullScreenImage(index: index),
-      ),
+  void _showFullScreenImage(BuildContext context, String imageName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: FullScreenImage(imageName: imageName),
+        );
+      },
     );
   }
 }
 
 class FullScreenImage extends StatelessWidget {
-  final int index;
+  final String imageName;
 
-  FullScreenImage({required this.index});
+  FullScreenImage({Key? key, required this.imageName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Full Screen Image"),
-      ),
-      body: Center(
-        child: FutureBuilder(
-          future: _getImage(context, (index + 1).toString() + '.png'),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              return Image.network(snapshot.data as String);
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else {
-              return Container(color: Colors.red);
-            }
-          },
-        ),
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          FutureBuilder<String>(
+            future: FirebaseStorageService.loadImage(context, imageName),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.hasData) {
+                return Image.network(
+                  snapshot.data!,
+                  fit: BoxFit.cover,
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return _buildLoadingIndicator();
+              } else {
+                return _buildErrorIndicator();
+              }
+            },
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: BottomNavigationBar(
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.favorite),
+                  label: 'Favorite',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.download),
+                  label: 'Download',
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Future<String> _getImage(BuildContext context, String imageName) async {
-    try {
-      return await FirebaseStorageService.loadImage(
-        context,
-        imageName,
-      );
-    } catch (e) {
-      print('Error loading image: $e');
-      return '';
-    }
+  Widget _buildLoadingIndicator() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  Widget _buildErrorIndicator() {
+    return Container(
+      color: Colors.red,
+    );
   }
 }
