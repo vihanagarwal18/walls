@@ -85,6 +85,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'firebase_Storage_services.dart';
+import 'package:like_button/like_button.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -182,8 +183,101 @@ class _HomepageState extends State<Homepage> {
   }
 }
 
+// class FullScreenImage extends StatelessWidget {
+//   final String imageName;
+//   bool isLiked=false;
+//   FullScreenImage({Key? key, required this.imageName}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: double.infinity,
+//       height: double.infinity,
+//       child: Stack(
+//         fit: StackFit.expand,
+//         children: [
+//           FutureBuilder<String>(
+//             future: FirebaseStorageService.loadImage(context, imageName),
+//             builder: (context, snapshot) {
+//               if (snapshot.connectionState == ConnectionState.done &&
+//                   snapshot.hasData) {
+//                 return Image.network(
+//                   snapshot.data!,
+//                   fit: BoxFit.cover,
+//                 );
+//               } else if (snapshot.connectionState == ConnectionState.waiting) {
+//                 return _buildLoadingIndicator();
+//               } else {
+//                 return _buildErrorIndicator();
+//               }
+//             },
+//           ),
+//           Positioned(
+//             bottom: 0,
+//             left: 0,
+//             right: 0,
+//             child: Row(
+//               children: [
+//                 ElevatedButton(
+//                   style: ElevatedButton.styleFrom(
+//                     primary: Colors.transparent,
+//                     onPrimary: Colors.white,
+//                   ),
+//                   onPressed: (){},
+//                   child: Text('Download'),
+//                 ),
+//                 LikeButton(
+//                   size: 30,
+//                   circleColor:
+//                   CircleColor(start: Color(0xff00ddff), end: Color(0xff0099cc)),
+//                   bubblesColor: BubblesColor(
+//                     dotPrimaryColor: Color(0xff33b5e5),
+//                     dotSecondaryColor: Color(0xff0099cc),
+//                   ),
+//                   onTap: onLikeButtonTapped,
+//                   likeBuilder: (bool isLiked) {
+//                     return Icon(
+//                       Icons.favorite,
+//                       color: isLiked ? Colors.red : Colors.grey,
+//                       size: 25,
+//                     );
+//                   },
+//                 ),
+//                 ElevatedButton(
+//                   style: ElevatedButton.styleFrom(
+//                     primary: Colors.transparent,
+//                     onPrimary: Colors.white,
+//                   ),
+//                   onPressed: (){},
+//                   child: Text('Set as Wallpaper'),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//   Future<bool> onLikeButtonTapped(bool isLiked) async{
+//     return !isLiked;
+//   }
+//
+//   Widget _buildLoadingIndicator() {
+//     return Center(
+//       child: CircularProgressIndicator(),
+//     );
+//   }
+//
+//   Widget _buildErrorIndicator() {
+//     return Container(
+//       color: Colors.red,
+//     );
+//   }
+// }
+
 class FullScreenImage extends StatelessWidget {
   final String imageName;
+  bool isLiked = false;
 
   FullScreenImage({Key? key, required this.imageName}) : super(key: key);
 
@@ -192,8 +286,9 @@ class FullScreenImage extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: double.infinity,
+      color: Colors.black,
       child: Stack(
-        fit: StackFit.expand,
+        //fit: StackFit.expand,
         children: [
           FutureBuilder<String>(
             future: FirebaseStorageService.loadImage(context, imageName),
@@ -202,7 +297,7 @@ class FullScreenImage extends StatelessWidget {
                   snapshot.hasData) {
                 return Image.network(
                   snapshot.data!,
-                  fit: BoxFit.cover,
+                  //fit: BoxFit.cover,
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return _buildLoadingIndicator();
@@ -215,15 +310,58 @@ class FullScreenImage extends StatelessWidget {
             bottom: 0,
             left: 0,
             right: 0,
-            child: BottomNavigationBar(
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite),
-                  label: 'Favorite',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.download),
-                  label: 'Download',
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        onPrimary: Colors.white,
+                      ),
+                      onPressed: () {},
+                      child: Column(
+                        children: [
+                          Icon(Icons.download),
+                          Text('Download'),
+                        ],
+                      ),
+                    ),
+                    LikeButton(
+                      size: 30,
+                      circleColor: CircleColor(
+                        start: Color(0xff00ddff),
+                        end: Color(0xff0099cc),
+                      ),
+                      bubblesColor: BubblesColor(
+                        dotPrimaryColor: Color(0xff33b5e5),
+                        dotSecondaryColor: Color(0xff0099cc),
+                      ),
+                      onTap: onLikeButtonTapped,
+                      likeBuilder: (bool isLiked) {
+                        return Icon(
+                          Icons.favorite,
+                          color: isLiked ? Colors.red : Colors.grey,
+                          size: 25,
+                        );
+                      },
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.transparent,
+                        onPrimary: Colors.white,
+                      ),
+                      onPressed: () {},
+                      child: Column(
+                        children: [
+                          Icon(Icons.wallpaper),
+                          Text('Set as Wallpaper'),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -231,6 +369,10 @@ class FullScreenImage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<bool> onLikeButtonTapped(bool isLiked) async {
+    return !isLiked;
   }
 
   Widget _buildLoadingIndicator() {
