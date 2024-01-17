@@ -82,8 +82,13 @@
 //   }
 // }
 
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:wallpaper/liked_images.dart';
 import 'firebase_Storage_services.dart';
 import 'package:like_button/like_button.dart';
 
@@ -100,6 +105,17 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("hello")),
+        actions: [
+    IconButton(
+      icon: Icon(Icons.favorite),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LikedWallpapersPage()),
+        );
+      },
+    ),
+  ],
       ),
       body: MasonryGridView.builder(
         itemCount: 15,
@@ -275,11 +291,17 @@ class _HomepageState extends State<Homepage> {
 //   }
 // }
 
-class FullScreenImage extends StatelessWidget {
+class FullScreenImage extends StatefulWidget {
   final String imageName;
-  bool isLiked = false;
 
   FullScreenImage({Key? key, required this.imageName}) : super(key: key);
+
+  @override
+  State<FullScreenImage> createState() => _FullScreenImageState();
+}
+
+class _FullScreenImageState extends State<FullScreenImage> {
+
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +313,7 @@ class FullScreenImage extends StatelessWidget {
         //fit: StackFit.expand,
         children: [
           FutureBuilder<String>(
-            future: FirebaseStorageService.loadImage(context, imageName),
+            future: FirebaseStorageService.loadImage(context, widget.imageName),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
@@ -341,10 +363,18 @@ class FullScreenImage extends StatelessWidget {
                       ),
                       onTap: onLikeButtonTapped,
                       likeBuilder: (bool isLiked) {
-                        return Icon(
-                          Icons.favorite,
-                          color: isLiked ? Colors.red : Colors.grey,
-                          size: 25,
+                        return ValueListenableBuilder(
+                          valueListenable: Hive.box<bool>('likes')
+                              .listenable(keys: [widget.imageName]),
+                          builder: (context, Box<bool> box, _) {
+                            final isLiked =
+                                box.get(widget.imageName, defaultValue: false);
+                            return Icon(
+                              Icons.favorite,
+                              color: isLiked! ? Colors.red : Colors.grey,
+                              size: 25,
+                            );
+                          },
                         );
                       },
                     ),
@@ -372,6 +402,8 @@ class FullScreenImage extends StatelessWidget {
   }
 
   Future<bool> onLikeButtonTapped(bool isLiked) async {
+    final box = Hive.box<bool>('likes');
+    box.put(widget.imageName, !isLiked);
     return !isLiked;
   }
 
