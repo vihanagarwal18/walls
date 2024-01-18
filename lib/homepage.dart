@@ -88,9 +88,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:wallpaper/liked_images.dart';
 import 'firebase_Storage_services.dart';
 import 'package:like_button/like_button.dart';
+import 'package:dio/dio.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -106,16 +109,16 @@ class _HomepageState extends State<Homepage> {
       appBar: AppBar(
         title: Center(child: Text("hello")),
         actions: [
-    IconButton(
-      icon: Icon(Icons.favorite),
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LikedWallpapersPage()),
-        );
-      },
-    ),
-  ],
+          IconButton(
+            icon: Icon(Icons.favorite),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LikedWallpapersPage()),
+              );
+            },
+          ),
+        ],
       ),
       body: MasonryGridView.builder(
         itemCount: 15,
@@ -301,8 +304,7 @@ class FullScreenImage extends StatefulWidget {
 }
 
 class _FullScreenImageState extends State<FullScreenImage> {
-
-
+  String? imageUrl;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -317,6 +319,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.hasData) {
+                imageUrl = snapshot.data;
                 return Image.network(
                   snapshot.data!,
                   //fit: BoxFit.cover,
@@ -343,7 +346,19 @@ class _FullScreenImageState extends State<FullScreenImage> {
                         primary: Colors.transparent,
                         onPrimary: Colors.white,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        var dio = Dio();
+                        var tempDir = await getTemporaryDirectory();
+                        var tempPath = tempDir.path;
+                        var fullPath = '$tempPath/image.png';
+
+                        await dio.download(imageUrl!, fullPath).then((_) {
+                          GallerySaver.saveImage(fullPath)
+                              .then((bool? success) {
+                            print('Image is saved to Gallery');
+                          });
+                        });
+                      },
                       child: Column(
                         children: [
                           Icon(Icons.download),
