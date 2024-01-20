@@ -18,10 +18,12 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   List<String> images_list=[];
-  void initstate(){
+  @override
+  void initState(){
     getItemList();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     print(images_list);
@@ -49,7 +51,7 @@ class _HomepageState extends State<Homepage> {
         itemBuilder: (context, index) => GestureDetector(
           onTap: () {
             //_showFullScreenImage(context, (index + 1).toString() + '.png');
-            _showFullScreenImage(context, images_list[index]);
+            _showFullScreenImage(context, images_list[index].toString());
           },
           child: Padding(
             padding: const EdgeInsets.all(5.0),
@@ -57,7 +59,8 @@ class _HomepageState extends State<Homepage> {
               borderRadius: BorderRadius.circular(18),
               child: FutureBuilder(
                 //future: _getImage(context, (index + 1).toString() + '.png'),
-                future: _getImage(context, images_list[index]),
+
+                future: _getImage(context, images_list[index].toString()),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.hasData) {
@@ -134,8 +137,10 @@ class _HomepageState extends State<Homepage> {
         String name = item['pic'];
         aff.add(name);
       }
-      images_list=aff;
-      print(images_list);
+      //images_list=aff;
+      setState(() {
+        images_list = aff;
+      });
       // return aff;
     } else {
       print("Failed to fetch data. Status code: ${response.statusCode}");
