@@ -1,94 +1,38 @@
-// // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class ListNames extends StatefulWidget {
   const ListNames({Key? key}) : super(key: key);
-
   @override
   State<ListNames> createState() => _ListNamesState();
 }
 
 class _ListNamesState extends State<ListNames> {
-  DatabaseReference _databaseReference =
-  FirebaseDatabase.instance.ref().child("data");
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Firebase Data Example'),
       ),
-      body: FutureBuilder<DataSnapshot>(
-        future: _databaseReference.once() as Future<DataSnapshot>,
-        builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
-          if (snapshot.hasData) {
-            List<dynamic> data = (snapshot.data!.value as List<dynamic>);
-            return ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                Map<String, dynamic> item = data[index];
-                return ListTile(
-                  title: Text(item['name']),
-                );
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
     );
   }
+  Future<List<String>> getItemList() async {
+    print("Fetching started");
+    String url = "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body) as List<dynamic>;
+      List<String> aff = [];
+      for (var item in jsonData) {
+        String name = item['pic'];
+        aff.add(name);
+      }
+      return aff;
+    } else {
+      print("Failed to fetch data. Status code: ${response.statusCode}");
+      return [];
+    }
+  }
 }
-
-// class ListNames extends StatefulWidget {
-//   const ListNames({Key? key}) : super(key: key);
-//   @override
-//   State<ListNames> createState() => _ListNamesState();
-// }
-//
-// class _ListNamesState extends State<ListNames> {
-//   DatabaseReference _databaseReference =
-//   FirebaseDatabase.instance.ref().child("data");
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Firebase Data Example'),
-//       ),
-//       body: FutureBuilder<DataSnapshot>(
-//         future: _databaseReference.once() as Future<DataSnapshot>,
-//         builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
-//           if (snapshot.hasData) {
-//             Map<dynamic, dynamic> data =
-//             (snapshot.data!.value as Map<dynamic, dynamic>);
-//             return ListView.builder(
-//               itemCount: data.length,
-//               itemBuilder: (context, index) {
-//                 return ListTile(
-//                   title: Text(data.values.elementAt(index)['name']),
-//                   // Replace 'yourField' with the actual field you want to display.
-//                 );
-//               },
-//             );
-//           } else if (snapshot.hasError) {
-//             return Center(
-//               child: Text('Error: ${snapshot.error}'),
-//             );
-//           } else {
-//             return Center(
-//               child: CircularProgressIndicator(),
-//             );
-//           }
-//         },
-//       ),
-//     );
-//   }
-// }
 
