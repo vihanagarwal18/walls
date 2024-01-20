@@ -5,6 +5,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wallpaper/fullscreen_image.dart';
 import 'package:wallpaper/liked_images.dart';
 import 'firebase_Storage_services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -14,8 +17,14 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  List<String> images_list=[];
+  void initstate(){
+    getItemList();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    print(images_list);
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text("hello")),
@@ -32,20 +41,23 @@ class _HomepageState extends State<Homepage> {
         ],
       ),
       body: MasonryGridView.builder(
-        itemCount: 15,
+        //itemCount: 15,
+        itemCount: images_list.length,
         gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
         ),
         itemBuilder: (context, index) => GestureDetector(
           onTap: () {
-            _showFullScreenImage(context, (index + 1).toString() + '.png');
+            //_showFullScreenImage(context, (index + 1).toString() + '.png');
+            _showFullScreenImage(context, images_list[index]);
           },
           child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(18),
               child: FutureBuilder(
-                future: _getImage(context, (index + 1).toString() + '.png'),
+                //future: _getImage(context, (index + 1).toString() + '.png'),
+                future: _getImage(context, images_list[index]),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done &&
                       snapshot.hasData) {
@@ -110,5 +122,23 @@ class _HomepageState extends State<Homepage> {
         );
       },
     );
+  }
+  void getItemList() async {
+    print("Fetching started");
+    String url = "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body) as List<dynamic>;
+      List<String> aff = [];
+      for (var item in jsonData) {
+        String name = item['pic'];
+        aff.add(name);
+      }
+      images_list=aff;
+      print(images_list);
+      // return aff;
+    } else {
+      print("Failed to fetch data. Status code: ${response.statusCode}");
+    }
   }
 }
