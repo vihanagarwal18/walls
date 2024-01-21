@@ -2,11 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:wallpaper/fullscreen_image.dart';
-import 'package:wallpaper/liked_images.dart';
+import 'package:Walls/fullscreen_image.dart';
+import 'package:Walls/liked_images.dart';
 import 'firebase_Storage_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:wallpaper/wallpaper.dart';
 
 
 class Homepage extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:wallpaper/fullscreen_image.dart';
+import 'package:Walls/fullscreen_image.dart';
 import 'firebase_Storage_services.dart';
 
 class LikedWallpapersPage extends StatefulWidget {

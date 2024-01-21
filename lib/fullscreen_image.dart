@@ -9,7 +9,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:like_button/like_button.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:wallpaper/firebase_Storage_services.dart';
+import 'package:Walls/firebase_Storage_services.dart';
 
 
 class FullScreenImage extends StatefulWidget {
