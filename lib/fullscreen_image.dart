@@ -2,14 +2,15 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:like_button/like_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:Walls/firebase_Storage_services.dart';
-import 'package:wallpaper/wallpaper.dart';
-
+import 'package:async_wallpaper/async_wallpaper.dart';
 
 class FullScreenImage extends StatefulWidget {
   final String imageName;
@@ -22,14 +23,6 @@ class FullScreenImage extends StatefulWidget {
 
 class _FullScreenImageState extends State<FullScreenImage> {
   String? imageUrl;
-
-  String home = "Home Screen",
-      lock = "Lock Screen",
-      both = "Both Home & Lock Screen";
-  late Stream<String> progressString;
-  late String res;
-  //bool downloading = false;
-  var result = "Waiting to set wallpaper";
 
   @override
   Widget build(BuildContext context) {
@@ -126,8 +119,40 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           backgroundColor: Colors.transparent,
                           foregroundColor: Colors.white,
                         ),
-                        onPressed: () {
-                          _showOptionsPopupMenu(context);
+                        onPressed: () async {
+                          var file = await DefaultCacheManager().getSingleFile(imageUrl!);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Set Wallpaper'),
+                                content: Text('Where would you like to set the wallpaper?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: Text('Home Screen'),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                      await _setWallpaper(file.path, AsyncWallpaper.HOME_SCREEN);
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('Lock Screen'),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                      await _setWallpaper(file.path, AsyncWallpaper.LOCK_SCREEN);
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: Text('Both'),
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(); // Close the dialog
+                                      await _setWallpaper(file.path, AsyncWallpaper.BOTH_SCREENS);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: Column(
                           children: [
@@ -164,6 +189,28 @@ class _FullScreenImageState extends State<FullScreenImage> {
     );
   }
 
+  Future<void> _setWallpaper(String filePath, int wallpaperLocation) async {
+    String result;
+    try {
+      result = await AsyncWallpaper.setWallpaperFromFile(
+        filePath: filePath,
+        wallpaperLocation: wallpaperLocation,
+        goToHome: false,
+        toastDetails: ToastDetails.success(),
+        errorToastDetails: ToastDetails.error(),
+      )
+          ? 'Wallpaper set'
+          : 'Failed to set wallpaper.';
+    } on PlatformException {
+      result = 'Failed to set wallpaper.';
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(result),
+      ),
+    );
+  }
+
   void _showFullScreenImage(BuildContext context, String imageName) {
     showDialog(
       context: context,
@@ -177,83 +224,4 @@ class _FullScreenImageState extends State<FullScreenImage> {
       },
     );
   }
-
-  Future<void> dowloadImage(BuildContext context) async {
-    print(1);
-    progressString = Wallpaper.imageDownloadProgress(imageUrl!);
-    progressString.listen((data) {
-      setState(() {
-        res = data;
-        //downloading = true;
-      });
-      //print("DataReceived: " + data);
-    }, onDone: () async {
-      setState(() {
-        //downloading = false;
-      });
-      print("Task Done");
-    }, onError: (error) {
-      setState(() {
-        //downloading = false;
-      });
-      print("Some Error");
-    });
-  }
-
-  void _showOptionsPopupMenu(BuildContext context) async {
-    //final String? selectedOption = await showMenu<String>(
-    await showMenu<String>(
-      context: context,
-      position: RelativeRect.fromLTRB(100, 100, 0, 0), // will edit this during UI
-      items: <PopupMenuEntry<String>>[
-        PopupMenuItem<String>(
-          value: 'Home Screen',
-          child: Text('Home Screen'),
-          onTap: () async{
-            await dowloadImage(context);
-            print(2);
-            home = await Wallpaper.homeScreen(
-                //options: RequestSizeOptions.RESIZE_FIT,
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-            );
-            setState(() {
-              //downloading = false;
-              home = home;
-            });
-          },
-        ),
-        PopupMenuItem<String>(
-          value: 'Lock Screen',
-          child: Text('Lock Screen'),
-          onTap: () async {
-            await dowloadImage(context);
-            print(3);
-            lock = await Wallpaper.lockScreen();
-            setState(() {
-              //downloading = false;
-              lock = lock;
-            });
-            print("Task Done");
-          },
-        ),
-        PopupMenuItem<String>(
-          value: 'Both Home & Lock Screen',
-          child: Text('Both Home & Lock Screen'),
-          onTap: ()async {
-            await dowloadImage(context);
-            print(4);
-            both = await Wallpaper.bothScreen();
-            setState(() {
-              //downloading = false;
-              both = both;
-            });
-            print("Task Done");
-          },
-        ),
-      ],
-    );
-  }
 }
-
-
