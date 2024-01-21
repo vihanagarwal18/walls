@@ -206,7 +206,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
     }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(result),
+        content: Text(result), 
       ),
     );
   }
