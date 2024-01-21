@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
@@ -10,6 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:like_button/like_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:Walls/firebase_Storage_services.dart';
+import 'package:wallpaper/wallpaper.dart';
 
 
 class FullScreenImage extends StatefulWidget {
@@ -23,6 +22,14 @@ class FullScreenImage extends StatefulWidget {
 
 class _FullScreenImageState extends State<FullScreenImage> {
   String? imageUrl;
+
+  String home = "Home Screen",
+      lock = "Lock Screen",
+      both = "Both Home & Lock Screen";
+  late Stream<String> progressString;
+  late String res;
+  //bool downloading = false;
+  var result = "Waiting to set wallpaper";
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +126,9 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           backgroundColor: Colors.transparent,
                           foregroundColor: Colors.white,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          _showOptionsPopupMenu(context);
+                        },
                         child: Column(
                           children: [
                             Icon(Icons.wallpaper),
@@ -168,4 +177,83 @@ class _FullScreenImageState extends State<FullScreenImage> {
       },
     );
   }
+
+  Future<void> dowloadImage(BuildContext context) async {
+    print(1);
+    progressString = Wallpaper.imageDownloadProgress(imageUrl!);
+    progressString.listen((data) {
+      setState(() {
+        res = data;
+        //downloading = true;
+      });
+      //print("DataReceived: " + data);
+    }, onDone: () async {
+      setState(() {
+        //downloading = false;
+      });
+      print("Task Done");
+    }, onError: (error) {
+      setState(() {
+        //downloading = false;
+      });
+      print("Some Error");
+    });
+  }
+
+  void _showOptionsPopupMenu(BuildContext context) async {
+    //final String? selectedOption = await showMenu<String>(
+    await showMenu<String>(
+      context: context,
+      position: RelativeRect.fromLTRB(100, 100, 0, 0), // will edit this during UI
+      items: <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          value: 'Home Screen',
+          child: Text('Home Screen'),
+          onTap: () async{
+            await dowloadImage(context);
+            print(2);
+            home = await Wallpaper.homeScreen(
+                //options: RequestSizeOptions.RESIZE_FIT,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+            );
+            setState(() {
+              //downloading = false;
+              home = home;
+            });
+          },
+        ),
+        PopupMenuItem<String>(
+          value: 'Lock Screen',
+          child: Text('Lock Screen'),
+          onTap: () async {
+            await dowloadImage(context);
+            print(3);
+            lock = await Wallpaper.lockScreen();
+            setState(() {
+              //downloading = false;
+              lock = lock;
+            });
+            print("Task Done");
+          },
+        ),
+        PopupMenuItem<String>(
+          value: 'Both Home & Lock Screen',
+          child: Text('Both Home & Lock Screen'),
+          onTap: ()async {
+            await dowloadImage(context);
+            print(4);
+            both = await Wallpaper.bothScreen();
+            setState(() {
+              //downloading = false;
+              both = both;
+            });
+            print("Task Done");
+          },
+        ),
+      ],
+    );
+  }
 }
+
+

@@ -7,7 +7,6 @@ import 'package:Walls/liked_images.dart';
 import 'firebase_Storage_services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:wallpaper/wallpaper.dart';
 
 
 class Homepage extends StatefulWidget {
