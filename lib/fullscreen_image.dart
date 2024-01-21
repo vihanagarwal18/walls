@@ -23,9 +23,11 @@ class FullScreenImage extends StatefulWidget {
 
 class _FullScreenImageState extends State<FullScreenImage> {
   String? imageUrl;
+  String? imagename;
 
   @override
   Widget build(BuildContext context) {
+    imagename=widget.imageName;
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -57,6 +59,15 @@ class _FullScreenImageState extends State<FullScreenImage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Text(
+                  imagename!.split('.').first,
+                  //imagename!,
+                  textAlign: TextAlign.left, // not working idk why
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
