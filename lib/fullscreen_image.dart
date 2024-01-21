@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:hive/hive.dart';
+//import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:like_button/like_button.dart';
 import 'package:path_provider/path_provider.dart';
