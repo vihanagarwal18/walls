@@ -45,23 +45,45 @@ class _HomepageState extends State<Homepage> {
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text('About the App'),
+            child: Text('Walls'),
           ),
           ListTile(
-            title: Row(
-              children: [
-                Text('About the Developers'),
-              ],
+            title: Text(
+              'Liked Images',
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
-          ),
-          ListTile(
-            title: Text('Liked Images'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LikedWallpapersPage()),
               );
             },
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                Text(
+                    'About the App',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            title: Row(
+              children: [
+                Text(
+                  'Know the Developers',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
