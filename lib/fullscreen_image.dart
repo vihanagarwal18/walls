@@ -12,6 +12,7 @@ import 'package:like_button/like_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:Walls/firebase_Storage_services.dart';
 import 'package:async_wallpaper/async_wallpaper.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FullScreenImage extends StatefulWidget {
   final String imageName;
@@ -100,14 +101,25 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           await dio.download(imageUrl!, fullPath).then((_) {
                             GallerySaver.saveImage(fullPath)
                                 .then((bool? success) {
-                              FloatingSnackBar(
-                                message: 'Wallpaper saved to gallery!✅',
-                                context: context,
-                                textColor: Colors.black,
-                                textStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                                duration: const Duration(milliseconds: 4000),
-                                backgroundColor: Colors.white,
+                              Fluttertoast.showToast(
+                                  msg: "😀 Wallpaper saved to gallery!",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
                               );
+                              // FloatingSnackBar(
+                              //   message: 'Wallpaper saved to gallery!✅',
+                              //   context: context,
+                              //   textColor: Colors.black,
+                              //   textStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                              //   duration: const Duration(milliseconds: 4000),
+                              //   backgroundColor: Colors.white,
+                              // );
+
+
                             });
                           });
                         },
@@ -244,11 +256,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
     } on PlatformException {
       result = 'Failed to set wallpaper.';
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(result),
-      ),
-    );
+
   }
 
   void _showFullScreenImage(BuildContext context, String imageName) {

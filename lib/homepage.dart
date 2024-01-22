@@ -335,62 +335,6 @@ class _HomepageState extends State<Homepage> {
       },
     );
   }
-  // Widget heading(){
-  //   {
-  //     if (ww==false) {
-  //       return SizedBox(
-  //         width: 250.0,
-  //         child: DefaultTextStyle(
-  //           style: const TextStyle(
-  //             fontSize: 90,
-  //             color: Colors.white,
-  //             shadows: [
-  //               Shadow(
-  //                 blurRadius: 7.0,
-  //                 color: Colors.white,
-  //                 offset: Offset(0, 0),
-  //               ),
-  //             ],
-  //           ),
-  //           child: AnimatedTextKit(
-  //             //repeatForever: true,
-  //             totalRepeatCount: 3,
-  //             animatedTexts: [
-  //               FlickerAnimatedText('Walls'),
-  //             ],
-  //             onFinished: () {
-  //               setState(() {
-  //                 ww = true;
-  //               });
-  //             },
-  //           ),
-  //         ),
-  //       );
-  //     } else {
-  //       return TextButton(
-  //           onPressed: (){
-  //             setState(() {
-  //               ww=false;
-  //             });
-  //           },
-  //           child: Text(
-  //             'Walls',
-  //             style: TextStyle(
-  //               fontSize: 90,
-  //               color: Colors.white,
-  //               shadows: [
-  //                 Shadow(
-  //                   blurRadius: 7.0,
-  //                   color: Colors.white,
-  //                   offset: Offset(0, 0),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //       );
-  //     }
-  //   }
-  // }
   Widget heading() {
   return Center(
     child: ww == false
