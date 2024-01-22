@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -19,6 +20,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   List<String> images_list = [];
+  bool ww = false;
 
   final _advancedDrawerController = AdvancedDrawerController();
   @override
@@ -29,7 +31,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    print(images_list);
+    //print(images_list);
     return AdvancedDrawer(
       controller: _advancedDrawerController,
       disabledGestures: false,
@@ -43,9 +45,9 @@ class _HomepageState extends State<Homepage> {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Color.fromARGB(255, 17, 17, 17),
             ),
-            child: Text('Walls'),
+            child: heading(), //after 3 flickers it would stop
           ),
           ListTile(
             title: Text(
@@ -249,6 +251,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   void _handleMenuButtonPressed() {
+
     _advancedDrawerController.showDrawer();
   }
   void showAboutAppDialog_app(BuildContext context) {
@@ -328,5 +331,61 @@ class _HomepageState extends State<Homepage> {
         );
       },
     );
+  }
+  Widget heading(){
+    {
+      if (ww==false) {
+        return SizedBox(
+          width: 250.0,
+          child: DefaultTextStyle(
+            style: const TextStyle(
+              fontSize: 90,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  blurRadius: 7.0,
+                  color: Colors.white,
+                  offset: Offset(0, 0),
+                ),
+              ],
+            ),
+            child: AnimatedTextKit(
+              //repeatForever: true,
+              totalRepeatCount: 3,
+              animatedTexts: [
+                FlickerAnimatedText('Walls'),
+              ],
+              onFinished: () {
+                setState(() {
+                  ww = true;
+                });
+              },
+            ),
+          ),
+        );
+      } else {
+        return TextButton(
+            onPressed: (){
+              setState(() {
+                ww=false;
+              });
+            },
+            child: Text(
+              'Walls',
+              style: TextStyle(
+                fontSize: 90,
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                    blurRadius: 7.0,
+                    color: Colors.white,
+                    offset: Offset(0, 0),
+                  ),
+                ],
+              ),
+            ),
+        );
+      }
+    }
   }
 }
