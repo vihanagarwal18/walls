@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:floating_snackbar/floating_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -26,175 +27,186 @@ class _FullScreenImageState extends State<FullScreenImage> {
   String? imagename;
   late bool isLikedT;
 
+
   @override
   Widget build(BuildContext context) {
+   
+   
     imagename = widget.imageName;
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.black,
-      child: Stack(
-        //fit: StackFit.expand,
-        children: [
-          FutureBuilder<String>(
-            future: FirebaseStorageService.loadImage(context, widget.imageName),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done &&
-                  snapshot.hasData) {
-                imageUrl = snapshot.data;
-                return Image.network(
-                  snapshot.data!,
-                  //fit: BoxFit.cover,
-                );
-              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                return _buildLoadingIndicator();
-              } else {
-                return _buildErrorIndicator();
-              }
-            },
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        imagename!.split('.').first,
-                        //imagename!,
-                        textAlign: TextAlign.left, // not working idk why
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white,
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.black,
+        child: Stack(
+          //fit: StackFit.expand,
+          children: [
+            FutureBuilder<String>(
+              future:
+                  FirebaseStorageService.loadImage(context, widget.imageName),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done &&
+                    snapshot.hasData) {
+                  imageUrl = snapshot.data;
+                  return Image.network(
+                    snapshot.data!,
+                    //fit: BoxFit.cover,
+                  );
+                } else if (snapshot.connectionState ==
+                    ConnectionState.waiting) {
+                  return _buildLoadingIndicator();
+                } else {
+                  return _buildErrorIndicator();
+                }
+              },
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          imagename!.split('.').first,
+                          //imagename!,
+                          textAlign: TextAlign.left, // not working idk why
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.white,
-                      ),
-                      onPressed: () async {
-                        var dio = Dio();
-                        var tempDir = await getTemporaryDirectory();
-                        var tempPath = tempDir.path;
-                        var fullPath = '$tempPath/image.png';
-
-                        await dio.download(imageUrl!, fullPath).then((_) {
-                          GallerySaver.saveImage(fullPath)
-                              .then((bool? success) {
-                            print('Image is saved to Gallery');
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("Wallpaper saved to gallery!"),
-                            ));
-                          });
-                        });
-                      },
-                      child: Column(
-                        children: [
-                          Icon(Icons.download),
-                          Text('Download'),
-                        ],
-                      ),
-                    ),
-                    LikeButton(
-                      size: 30,
-                      circleColor: CircleColor(
-                        start: Color(0xff00ddff),
-                        end: Color(0xff0099cc),
-                      ),
-                      bubblesColor: BubblesColor(
-                        dotPrimaryColor: Color(0xff33b5e5),
-                        dotSecondaryColor: Color(0xff0099cc),
-                      ),
-                      onTap: onLikeButtonTapped,
-                      likeBuilder: (bool isLiked) {
-                        return ValueListenableBuilder(
-                          valueListenable: Hive.box<bool>('likes')
-                              .listenable(keys: [widget.imageName]),
-                          builder: (context, Box<bool> box, _) {
-                            isLikedT = box.get(widget.imageName) ?? false;
-                            return Icon(
-                              Icons.favorite,
-                              color: isLikedT ? Colors.red : Colors.grey,
-                              size: 25,
-                            );
-                          },
-                        );
-                      },
-                    ),
-                    if (!Platform.isIOS)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
                           foregroundColor: Colors.white,
                         ),
                         onPressed: () async {
-                          var file = await DefaultCacheManager()
-                              .getSingleFile(imageUrl!);
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Set Wallpaper'),
-                                content: Text(
-                                    'Where would you like to set the wallpaper?'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: Text('Home Screen'),
-                                    onPressed: () async {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                      await _setWallpaper(file.path,
-                                          AsyncWallpaper.HOME_SCREEN);
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('Lock Screen'),
-                                    onPressed: () async {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                      await _setWallpaper(file.path,
-                                          AsyncWallpaper.LOCK_SCREEN);
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: Text('Both'),
-                                    onPressed: () async {
-                                      Navigator.of(context)
-                                          .pop(); // Close the dialog
-                                      await _setWallpaper(file.path,
-                                          AsyncWallpaper.BOTH_SCREENS);
-                                    },
-                                  ),
-                                ],
+                          var dio = Dio();
+                          var tempDir = await getTemporaryDirectory();
+                          var tempPath = tempDir.path;
+                          var fullPath = '$tempPath/image.png';
+
+                          await dio.download(imageUrl!, fullPath).then((_) {
+                            GallerySaver.saveImage(fullPath)
+                                .then((bool? success) {
+                              FloatingSnackBar(
+                                message: 'Wallpaper saved to gallery!✅',
+                                context: context,
+                                textColor: Colors.black,
+                                textStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                                duration: const Duration(milliseconds: 4000),
+                                backgroundColor: Colors.white,
+                              );
+                            });
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Icon(Icons.download),
+                            Text('Download'),
+                          ],
+                        ),
+                      ),
+                      LikeButton(
+                        size: 30,
+                        circleColor: CircleColor(
+                          start: Color(0xff00ddff),
+                          end: Color(0xff0099cc),
+                        ),
+                        bubblesColor: BubblesColor(
+                          dotPrimaryColor: Color(0xff33b5e5),
+                          dotSecondaryColor: Color(0xff0099cc),
+                        ),
+                        onTap: onLikeButtonTapped,
+                        likeBuilder: (bool isLiked) {
+                          return ValueListenableBuilder(
+                            valueListenable: Hive.box<bool>('likes')
+                                .listenable(keys: [widget.imageName]),
+                            builder: (context, Box<bool> box, _) {
+                              isLikedT = box.get(widget.imageName) ?? false;
+                              return Icon(
+                                Icons.favorite,
+                                color: isLikedT ? Colors.red : Colors.grey,
+                                size: 25,
                               );
                             },
                           );
                         },
-                        child: Column(
-                          children: [
-                            Icon(Icons.wallpaper),
-                            Text('Set as Wallpaper'),
-                          ],
-                        ),
                       ),
-                  ],
-                ),
-              ],
+                      if (!Platform.isIOS)
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.white,
+                          ),
+                          onPressed: () async {
+                            var file = await DefaultCacheManager()
+                                .getSingleFile(imageUrl!);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Set Wallpaper'),
+                                  content: Text(
+                                      'Where would you like to set the wallpaper?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Home Screen'),
+                                      onPressed: () async {
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                        await _setWallpaper(file.path,
+                                            AsyncWallpaper.HOME_SCREEN);
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text('Lock Screen'),
+                                      onPressed: () async {
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                        await _setWallpaper(file.path,
+                                            AsyncWallpaper.LOCK_SCREEN);
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text('Both'),
+                                      onPressed: () async {
+                                        Navigator.of(context)
+                                            .pop(); // Close the dialog
+                                        await _setWallpaper(file.path,
+                                            AsyncWallpaper.BOTH_SCREENS);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              Icon(Icons.wallpaper),
+                              Text('Set as Wallpaper'),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
