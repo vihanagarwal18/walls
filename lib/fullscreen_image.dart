@@ -60,13 +60,20 @@ class _FullScreenImageState extends State<FullScreenImage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  imagename!.split('.').first,
-                  //imagename!,
-                  textAlign: TextAlign.left, // not working idk why
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.white,
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      Text(
+                        imagename!.split('.').first,
+                        //imagename!,
+                        textAlign: TextAlign.left, // not working idk why
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
