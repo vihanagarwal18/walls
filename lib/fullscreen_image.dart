@@ -121,7 +121,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
                               .listenable(keys: [widget.imageName]),
                           builder: (context, Box<bool> box, _) {
                             isLikedT = box.get(widget.imageName) ??
-                                true;
+                                false;
                             return Icon(
                               Icons.favorite,
                               color: isLikedT ? Colors.red : Colors.grey,
