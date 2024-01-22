@@ -70,9 +70,13 @@ class _HomepageState extends State<Homepage> {
           setState(() {});
         },
         child: Scaffold(
+          extendBodyBehindAppBar: true,
+          //extendBody: true,
           backgroundColor: Color.fromARGB(255, 17, 17, 17),
           appBar: AppBar(
-            backgroundColor: Color.fromARGB(255, 17, 17, 17),
+            elevation: 0,
+            backgroundColor: Color.fromARGB(150, 17, 17, 17),
+            //backgroundColor: Colors.transparent,
             title: Text(
               'Walls',
               style: TextStyle(
@@ -125,8 +129,6 @@ class _HomepageState extends State<Homepage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(18),
                   child: FutureBuilder(
-                    //future: _getImage(context, (index + 1).toString() + '.png'),
-
                     future: _getImage(context, images_list[index].toString()),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done &&
@@ -165,39 +167,23 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // Future<Widget> _getImage(BuildContext context, String imageName) async {
-  //   try {
-  //     String imageUrl = await FirebaseStorageService.loadImage(
-  //       context,
-  //       imageName,
-  //     );
-  //     return Image.network(
-  //       imageUrl,
-  //       fit: BoxFit.cover,
-  //     );
-  //   } catch (e) {
-  //     print('Error loading image: $e');
-  //     return Container(color: Colors.red);
-  //   }
-  // }
-
-Future<Widget> _getImage(BuildContext context, String imageName) async {
-  try {
-    String imageUrl = await FirebaseStorageService.loadImage(
-      context,
-      imageName,
-    );
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      fit: BoxFit.cover,
-      placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-      errorWidget: (context, url, error) => Container(color: Colors.red),
-    );
-  } catch (e) {
-    print('Error loading image: $e');
-    return Container(color: Colors.red);
+  Future<Widget> _getImage(BuildContext context, String imageName) async {
+    try {
+      String imageUrl = await FirebaseStorageService.loadImage(
+        context,
+        imageName,
+      );
+      return CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => Container(color: Colors.red),
+      );
+    } catch (e) {
+      print('Error loading image: $e');
+      return Container(color: Colors.red);
+    }
   }
-}
   void _showFullScreenImage(BuildContext context, String imageName) {
     showDialog(
       context: context,

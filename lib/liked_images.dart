@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:Walls/fullscreen_image.dart';
 import 'firebase_Storage_services.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class LikedWallpapersPage extends StatefulWidget {
   @override
@@ -15,15 +16,24 @@ class _LikedWallpapersPageState extends State<LikedWallpapersPage> {
     final likedImages = box.keys.where((key) => box.get(key) == true).toList();
 
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 17, 17, 17),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text('Liked Wallpapers'),
+        foregroundColor: Colors.white,
+        title: Text('Liked Wallpapers',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        //backgroundColor: Colors.transparent,
+        backgroundColor: Color.fromARGB(150, 17, 17, 17),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {});
         },
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        child: MasonryGridView.builder(
+          gridDelegate:  SliverSimpleGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),
           itemCount: likedImages.length,
@@ -33,24 +43,32 @@ class _LikedWallpapersPageState extends State<LikedWallpapersPage> {
               onTap: () {
                 _showFullScreenImage(context, imageName);
               },
-              child: FutureBuilder(
-                future: FirebaseStorageService.loadImage(context, imageName),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData) {
-                    return Image.network(
-                      snapshot.data!,
-                      fit: BoxFit.cover,
-                    );
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else {
-                    // Handle the error state
-                    return Center(child: Text('Error loading image'));
-                  }
-                },
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(18),
+                  child: FutureBuilder(
+                    future: FirebaseStorageService.loadImage(context, imageName),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        return Image.network(
+                          snapshot.data!,
+                          fit: BoxFit.cover,
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ));
+                      } else {
+                        // Handle the error state
+                        return Center(child: Text('Error loading image'));
+                      }
+                    },
+                  ),
+                ),
               ),
             );
           },
