@@ -24,6 +24,7 @@ class FullScreenImage extends StatefulWidget {
 class _FullScreenImageState extends State<FullScreenImage> {
   String? imageUrl;
   String? imagename;
+  late bool isLikedT;
 
   @override
   Widget build(BuildContext context) {
@@ -112,9 +113,8 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           valueListenable: Hive.box<bool>('likes')
                               .listenable(keys: [widget.imageName]),
                           builder: (context, Box<bool> box, _) {
-                            var isLikedT = box.get(widget.imageName,
-                                    defaultValue: false) ??
-                                false;
+                            isLikedT = box.get(widget.imageName) ??
+                                true;
                             return Icon(
                               Icons.favorite,
                               color: isLikedT ? Colors.red : Colors.grey,
