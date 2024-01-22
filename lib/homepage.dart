@@ -72,6 +72,9 @@ class _HomepageState extends State<Homepage> {
                 ),
               ],
             ),
+            onTap: (){
+              showAboutAppDialog_app(context);
+            },
           ),
           ListTile(
             title: Row(
@@ -84,6 +87,9 @@ class _HomepageState extends State<Homepage> {
                 ),
               ],
             ),
+            onTap: (){
+              showAboutAppDialog_developer(context);
+            },
           ),
         ],
       ),
@@ -244,5 +250,83 @@ class _HomepageState extends State<Homepage> {
 
   void _handleMenuButtonPressed() {
     _advancedDrawerController.showDrawer();
+  }
+  void showAboutAppDialog_app(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'About the App',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Your text goes here',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                // Add more content or buttons as needed
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the dialog
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+  void showAboutAppDialog_developer(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Know the Developers',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0,
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Your text goes here',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                // Add more content or buttons as needed
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the dialog
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
