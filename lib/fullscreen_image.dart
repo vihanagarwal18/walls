@@ -28,7 +28,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
 
   @override
   Widget build(BuildContext context) {
-    imagename=widget.imageName;
+    imagename = widget.imageName;
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -94,6 +94,9 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           GallerySaver.saveImage(fullPath)
                               .then((bool? success) {
                             print('Image is saved to Gallery');
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Wallpaper saved to gallery!"),
+                            ));
                           });
                         });
                       },
@@ -120,8 +123,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           valueListenable: Hive.box<bool>('likes')
                               .listenable(keys: [widget.imageName]),
                           builder: (context, Box<bool> box, _) {
-                            isLikedT = box.get(widget.imageName) ??
-                                false;
+                            isLikedT = box.get(widget.imageName) ?? false;
                             return Icon(
                               Icons.favorite,
                               color: isLikedT ? Colors.red : Colors.grey,
@@ -138,33 +140,41 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           foregroundColor: Colors.white,
                         ),
                         onPressed: () async {
-                          var file = await DefaultCacheManager().getSingleFile(imageUrl!);
+                          var file = await DefaultCacheManager()
+                              .getSingleFile(imageUrl!);
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
                                 title: Text('Set Wallpaper'),
-                                content: Text('Where would you like to set the wallpaper?'),
+                                content: Text(
+                                    'Where would you like to set the wallpaper?'),
                                 actions: <Widget>[
                                   TextButton(
                                     child: Text('Home Screen'),
                                     onPressed: () async {
-                                      Navigator.of(context).pop(); // Close the dialog
-                                      await _setWallpaper(file.path, AsyncWallpaper.HOME_SCREEN);
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                      await _setWallpaper(file.path,
+                                          AsyncWallpaper.HOME_SCREEN);
                                     },
                                   ),
                                   TextButton(
                                     child: Text('Lock Screen'),
                                     onPressed: () async {
-                                      Navigator.of(context).pop(); // Close the dialog
-                                      await _setWallpaper(file.path, AsyncWallpaper.LOCK_SCREEN);
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                      await _setWallpaper(file.path,
+                                          AsyncWallpaper.LOCK_SCREEN);
                                     },
                                   ),
                                   TextButton(
                                     child: Text('Both'),
                                     onPressed: () async {
-                                      Navigator.of(context).pop(); // Close the dialog
-                                      await _setWallpaper(file.path, AsyncWallpaper.BOTH_SCREENS);
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                      await _setWallpaper(file.path,
+                                          AsyncWallpaper.BOTH_SCREENS);
                                     },
                                   ),
                                 ],
@@ -224,7 +234,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
     }
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(result), 
+        content: Text(result),
       ),
     );
   }
