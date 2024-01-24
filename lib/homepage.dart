@@ -10,6 +10,7 @@ import 'dart:convert';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:expandable/expandable.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -21,6 +22,14 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   List<String> images_list = [];
   bool ww = false;
+  var list1=[
+    'Know the Developers',
+    'Vihan Agarwal',
+    'Gauransh Sharma'
+  ];
+  var list2=[
+
+  ];
 
   final _advancedDrawerController = AdvancedDrawerController();
   @override
@@ -63,36 +72,98 @@ class _HomepageState extends State<Homepage> {
               );
             },
           ),
-          ListTile(
-            title: Row(
-              children: [
-                Text(
-                    'About the App',
-                  style: TextStyle(
-                    color: Colors.white,
+          ExpandableNotifier(
+              child:Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: <Widget>[
+                      ScrollOnExpand(
+                        theme: ExpandableThemeData.defaults,
+                        scrollOnExpand: true,
+                        scrollOnCollapse: false,
+                        child:ExpandablePanel(
+                          header: Text(
+                              'know the Developers',
+                              style:TextStyle(
+                                color: Colors.white,
+                                backgroundColor:Color.fromARGB(255, 17, 17, 17),
+                              ),
+                          ),
+                          collapsed: Container(),//Text(
+                          //   'Know the Developers',
+                          //   style:TextStyle(
+                          //     color: Colors.white,
+                          //   ),
+                          // ),
+                          expanded: Text(
+                              'hello vihan',
+                              style:TextStyle(
+                                color: Colors.white,
+                              )
+                          ),
+                        ) ,
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-            onTap: (){
-              showAboutAppDialog_app(context);
-            },
+              ),
           ),
-          ListTile(
-            title: Row(
-              children: [
-                Text(
-                  'Know the Developers',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+          ExpandableNotifier(
+            child:Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: <Widget>[
+                    ScrollOnExpand(
+                      theme: ExpandableThemeData.defaults,
+                      scrollOnExpand: true,
+                      scrollOnCollapse: false,
+                      child:ExpandablePanel(
+                        header: Text(
+                          'know the Developers',
+                          style:TextStyle(
+                            color: Colors.white,
+                            backgroundColor:Color.fromARGB(255, 17, 17, 17),
+                          ),
+                        ),
+                        collapsed: Container(),//Text(
+                        //   'Know the Developers',
+                        //   style:TextStyle(
+                        //     color: Colors.white,
+                        //   ),
+                        // ),
+                        expanded: Text(
+                            'hello vihan',
+                            style:TextStyle(
+                              color: Colors.white,
+                            )
+                        ),
+                      ) ,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-            onTap: (){
-              showAboutAppDialog_developer(context);
-            },
           ),
+
+          // ListTile(
+          //   title: Row(
+          //     children: [
+          //       Text(
+          //         'Know the Developers',
+          //         style: TextStyle(
+          //           color: Colors.white,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          //   onTap: (){
+          //     showAboutAppDialog_developer(context);
+          //   },
+          // ),
         ],
       ),
       child: RefreshIndicator(
@@ -256,84 +327,6 @@ class _HomepageState extends State<Homepage> {
               });
 
     _advancedDrawerController.showDrawer();
-  }
-  void showAboutAppDialog_app(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'About the App',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                Text(
-                  'Your text goes here',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                // Add more content or buttons as needed
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                  },
-                  child: Text('Close'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-  void showAboutAppDialog_developer(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Know the Developers',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0,
-                  ),
-                ),
-                SizedBox(height: 10.0),
-                Text(
-                  'Your text goes here',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                  ),
-                ),
-                SizedBox(height: 20.0),
-                // Add more content or buttons as needed
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the dialog
-                  },
-                  child: Text('Close'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
   Widget heading() {
   return Center(

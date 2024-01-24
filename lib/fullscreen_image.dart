@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:floating_snackbar/floating_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +50,13 @@ class _FullScreenImageState extends State<FullScreenImage> {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {
                   imageUrl = snapshot.data;
-                  return Image.network(
-                    snapshot.data!,
+                  return CachedNetworkImage(
+                      imageUrl: snapshot.data!,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Container(color: Colors.red)
+                  // return Image.network(
+                  //   snapshot.data!,
                     //fit: BoxFit.cover,
                   );
                 } else if (snapshot.connectionState ==
