@@ -1,16 +1,18 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'dart:convert';
+
 import 'package:Walls/fullscreen_image.dart';
 import 'package:Walls/liked_images.dart';
-import 'firebase_Storage_services.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:expandable/expandable.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:http/http.dart' as http;
+
+import 'firebase_services.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -281,7 +283,7 @@ class _HomepageState extends State<Homepage> {
         errorWidget: (context, url, error) => Container(color: Colors.red),
       );
     } catch (e) {
-      print('Error loading image: $e');
+      // print('Error loading image: $e');
       return Container(color: Colors.red);
     }
   }
@@ -300,7 +302,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   void getItemList() async {
-    print("Fetching started");
+    // print("Fetching started");
     String url =
         "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
     var response = await http.get(Uri.parse(url));
@@ -317,7 +319,7 @@ class _HomepageState extends State<Homepage> {
       });
       // return aff;
     } else {
-      print("Failed to fetch data. Status code: ${response.statusCode}");
+      ("Failed to fetch data. Status code: ${response.statusCode}");
     }
   }
 

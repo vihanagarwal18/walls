@@ -45,6 +45,8 @@ dependencies:
   cached_network_image: ^3.2.0
   floating_snackbar: ^1.0.3+1
   expandable: ^5.0.1
+  firebase_messaging: ^14.7.10
+  flutter_riverpod: ^1.0.0
 
 
 
