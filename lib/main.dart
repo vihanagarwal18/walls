@@ -1,3 +1,5 @@
+import 'package:Walls/firebase_services.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'homepage.dart';
 import '../firebase_options.dart';
@@ -8,11 +10,15 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/services.dart';
 // ignore_for_file: prefer_const_constructors
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options:  DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await FirebaseApi().initNotifications();
 
   await Hive.initFlutter();
   await Hive.openBox<bool>('likes');
@@ -24,6 +30,10 @@ void main() async {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     //home: Set_as_Wallpaper(),
+    navigatorKey: navigatorKey,
+    routes : {
+      '/home' : (context) => Homepage(),
+    },
     home: Homepage(),
   ));
 }

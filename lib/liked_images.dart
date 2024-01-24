@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:Walls/fullscreen_image.dart';
-import 'firebase_Storage_services.dart';
+import 'firebase_services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class LikedWallpapersPage extends StatefulWidget {

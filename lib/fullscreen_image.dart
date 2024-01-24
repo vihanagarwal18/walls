@@ -10,7 +10,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:like_button/like_button.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:Walls/firebase_Storage_services.dart';
+import 'package:Walls/firebase_services.dart';
 import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
