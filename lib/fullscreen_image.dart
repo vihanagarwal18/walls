@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'dart:io';
+import 'package:Walls/providers.dart';
 import 'package:dio/dio.dart';
 import 'package:floating_snackbar/floating_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 //import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -14,26 +16,24 @@ import 'package:Walls/firebase_services.dart';
 import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class FullScreenImage extends StatefulWidget {
+class FullScreenImage extends ConsumerStatefulWidget {
   final String imageName;
-
   FullScreenImage({Key? key, required this.imageName}) : super(key: key);
 
   @override
-  State<FullScreenImage> createState() => _FullScreenImageState();
+  ConsumerState<FullScreenImage> createState() => _FullScreenImageState();
 }
 
-class _FullScreenImageState extends State<FullScreenImage> {
+class _FullScreenImageState extends ConsumerState<FullScreenImage> {
   String? imageUrl;
   String? imagename;
   late bool isLikedT;
 
-
   @override
   Widget build(BuildContext context) {
-   
-   
     imagename = widget.imageName;
+    final isLiked = ref.watch(likeStateProvider(widget.imageName));
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -108,8 +108,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
                                   timeInSecForIosWeb: 1,
                                   backgroundColor: Colors.green,
                                   textColor: Colors.white,
-                                  fontSize: 16.0
-                              );
+                                  fontSize: 16.0);
                               // FloatingSnackBar(
                               //   message: 'Wallpaper saved to gallery!✅',
                               //   context: context,
@@ -118,8 +117,6 @@ class _FullScreenImageState extends State<FullScreenImage> {
                               //   duration: const Duration(milliseconds: 4000),
                               //   backgroundColor: Colors.white,
                               // );
-
-
                             });
                           });
                         },
@@ -130,6 +127,32 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           ],
                         ),
                       ),
+                      // LikeButton(
+                      //   size: 30,
+                      //   circleColor: CircleColor(
+                      //     start: Color(0xff00ddff),
+                      //     end: Color(0xff0099cc),
+                      //   ),
+                      //   bubblesColor: BubblesColor(
+                      //     dotPrimaryColor: Color(0xff33b5e5),
+                      //     dotSecondaryColor: Color(0xff0099cc),
+                      //   ),
+                      //   onTap: onLikeButtonTapped,
+                      //   likeBuilder: (bool isLiked) {
+                      //     return ValueListenableBuilder(
+                      //       valueListenable: Hive.box<bool>('likes')
+                      //           .listenable(keys: [widget.imageName]),
+                      //       builder: (context, Box<bool> box, _) {
+                      //         isLikedT = box.get(widget.imageName) ?? false;
+                      //         return Icon(
+                      //           Icons.favorite,
+                      //           color: isLikedT ? Colors.red : Colors.grey,
+                      //           size: 25,
+                      //         );
+                      //       },
+                      //     );
+                      //   },
+                      // ),
                       LikeButton(
                         size: 30,
                         circleColor: CircleColor(
@@ -140,19 +163,20 @@ class _FullScreenImageState extends State<FullScreenImage> {
                           dotPrimaryColor: Color(0xff33b5e5),
                           dotSecondaryColor: Color(0xff0099cc),
                         ),
-                        onTap: onLikeButtonTapped,
+                        isLiked: isLiked, // Set the initial state
+                        onTap: (bool isLiked) async {
+                          // Toggle the like state using Riverpod
+                          ref
+                              .read(
+                                  likeStateProvider(widget.imageName).notifier)
+                              .toggleLike();
+                          return !isLiked;
+                        },
                         likeBuilder: (bool isLiked) {
-                          return ValueListenableBuilder(
-                            valueListenable: Hive.box<bool>('likes')
-                                .listenable(keys: [widget.imageName]),
-                            builder: (context, Box<bool> box, _) {
-                              isLikedT = box.get(widget.imageName) ?? false;
-                              return Icon(
-                                Icons.favorite,
-                                color: isLikedT ? Colors.red : Colors.grey,
-                                size: 25,
-                              );
-                            },
+                          return Icon(
+                            Icons.favorite,
+                            color: isLiked ? Colors.red : Colors.grey,
+                            size: 25,
                           );
                         },
                       ),
@@ -256,7 +280,6 @@ class _FullScreenImageState extends State<FullScreenImage> {
     } on PlatformException {
       result = 'Failed to set wallpaper.';
     }
-
   }
 
   void _showFullScreenImage(BuildContext context, String imageName) {

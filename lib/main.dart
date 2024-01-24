@@ -1,6 +1,7 @@
 import 'package:Walls/firebase_services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'homepage.dart';
 import '../firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,13 +28,14 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(MaterialApp(
+  runApp(ProviderScope(
+      child: MaterialApp(
     debugShowCheckedModeBanner: false,
     //home: Set_as_Wallpaper(),
     navigatorKey: navigatorKey,
-    routes : {
-      '/home' : (context) => Homepage(),
+    routes: {
+      '/home': (context) => Homepage(),
     },
     home: Homepage(),
-  ));
+  )));
 }
