@@ -24,14 +24,8 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   List<String> images_list = [];
   bool ww = false;
-  var list1=[
-    'Know the Developers',
-    'Vihan Agarwal',
-    'Gauransh Sharma'
-  ];
-  var list2=[
-
-  ];
+  var list1 = ['Know the Developers', 'Vihan Agarwal', 'Gauransh Sharma'];
+  var list2 = [];
 
   final _advancedDrawerController = AdvancedDrawerController();
   @override
@@ -51,101 +45,136 @@ class _HomepageState extends State<Homepage> {
       animateChildDecoration: true,
       rtlOpening: false,
       backdropColor: Color.fromARGB(255, 17, 17, 17),
-      drawer: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 17, 17, 17),
-            ),
-            child: heading(), //after 3 flickers it would stop
-          ),
-          ListTile(
-            title: Text(
-              'Liked Images',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LikedWallpapersPage()),
-              );
-            },
-          ),
-          Container(
-            color: Color.fromARGB(255, 17, 17, 17),
-            child: ExpandableNotifier(
-                child:Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Card(
-                    clipBehavior: Clip.antiAlias,
-                    child: Container(
+      drawer: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: BoxDecoration(
                       color: Color.fromARGB(255, 17, 17, 17),
-                      child: Column(
-                        children: <Widget>[
-                          ScrollOnExpand(
-                            theme: ExpandableThemeData.defaults,
-                            scrollOnExpand: true,
-                            scrollOnCollapse: false,
-                            child:ExpandablePanel(
-                              header: Text(
-                                  'Know the Developers',
-                                  style:TextStyle(
-                                    color: Colors.white,
-                                    backgroundColor:Color.fromARGB(255, 17, 17, 17),
-                                  ),
-                              ),
-                              collapsed: Container(
-                                color: Color.fromARGB(255, 17, 17, 17),
-                              ),
-                              expanded: Container(
-                                color: Color.fromARGB(255, 17, 17, 17),
-                                child: Column(
-                                  children: [
-                                    TextButton(
-                                      onPressed: () async {
-                                        _launchURL_vihan();
-                                      },
-                                      child: Text(
-                                        'Vihan Agarwal',
-                                        style:TextStyle(
+                    ),
+                    child: heading(), //after 3 flickers it would stop
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Liked Images',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => LikedWallpapersPage()),
+                      );
+                    },
+                  ),
+                  Container(
+                    color: Color.fromARGB(255, 17, 17, 17),
+                    child: ExpandableNotifier(
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          child: Container(
+                            color: Color.fromARGB(255, 17, 17, 17),
+                            child: Column(
+                              children: <Widget>[
+                                ScrollOnExpand(
+                                  theme: ExpandableThemeData.defaults,
+                                  scrollOnExpand: true,
+                                  scrollOnCollapse: false,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: ExpandablePanel(
+                                      header: Text(
+                                        'Know the Developers',
+                                        style: TextStyle(
                                           color: Colors.white,
+                                          backgroundColor:
+                                              Color.fromARGB(255, 17, 17, 17),
+                                        ),
+                                      ),
+                                      collapsed: Container(
+                                        color: Color.fromARGB(255, 17, 17, 17),
+                                      ),
+                                      expanded: Container(
+                                        color: Color.fromARGB(255, 17, 17, 17),
+                                        child: Column(
+                                          children: [
+                                            TextButton(
+                                              onPressed: () async {
+                                                _launchURL(
+                                                    'https://github.com/vihanagarwal18',
+                                                    'https',
+                                                    'github.com',
+                                                    '/vihanagarwal18');
+                                              },
+                                              child: Text(
+                                                'Vihan Agarwal',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.all(10)),
+                                            TextButton(
+                                              onPressed: () async {
+                                                _launchURL(
+                                                    "https://github.com/gauransh18",
+                                                    'https',
+                                                    'github.com',
+                                                    '/gauransh18');
+                                              },
+                                              child: Text('Gauransh Sharma',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  )),
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.all(10)),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                    Padding(padding:EdgeInsets.all(10)),
-                                    TextButton(
-                                      onPressed: () async{
-                                        _launchURL_gauransh();
-                                      },
-                                      child: Text(
-                                          'Gauransh Sharma',
-                                          style:TextStyle(
-                                            color: Colors.white,
-                                          )
-                                      ),
-                                    ),
-                                    Padding(padding:EdgeInsets.all(10)),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ) ,
+                              ],
+                            ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            height: 100,
-            alignment: Alignment.bottomCenter,
-            color: Colors.redAccent,
-          ),
-        ],
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(24.0),
+              color: Color.fromARGB(
+                  255, 17, 17, 17), // Match the drawer's background color
+              child: GestureDetector(
+                onTap: () async {
+                  _launchURL('https://github.com/vihanagarwal18/walls', 'https',
+                      'github.com', '/vihanagarwal18/walls');
+                },
+                child: Text(
+                  "Github • V1.0",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       child: RefreshIndicator(
         onRefresh: () async {
@@ -258,7 +287,8 @@ class _HomepageState extends State<Homepage> {
       return CachedNetworkImage(
         imageUrl: imageUrl,
         fit: BoxFit.cover,
-        placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+        placeholder: (context, url) =>
+            Center(child: CircularProgressIndicator()),
         errorWidget: (context, url, error) => Container(color: Colors.red),
       );
     } catch (e) {
@@ -266,6 +296,7 @@ class _HomepageState extends State<Homepage> {
       return Container(color: Colors.red);
     }
   }
+
   void _showFullScreenImage(BuildContext context, String imageName) {
     showDialog(
       context: context,
@@ -304,89 +335,69 @@ class _HomepageState extends State<Homepage> {
 
   void _handleMenuButtonPressed() {
     setState(() {
-                ww = false;
-              });
+      ww = false;
+    });
 
     _advancedDrawerController.showDrawer();
   }
+
   Widget heading() {
-  return Center(
-    child: ww == false
-        ? SizedBox(
-            width: 250.0,
-            child: DefaultTextStyle(
-              style: const TextStyle(
-                fontSize: 90,
-                color: Colors.white,
-                shadows: [
-                  Shadow(
-                    blurRadius: 7.0,
-                    color: Colors.white,
-                    offset: Offset(0, 0),
-                  ),
-                ],
+    return Center(
+      child: ww == false
+          ? SizedBox(
+              width: 250.0,
+              child: DefaultTextStyle(
+                style: const TextStyle(
+                  fontSize: 90,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 7.0,
+                      color: Colors.white,
+                      offset: Offset(0, 0),
+                    ),
+                  ],
+                ),
+                child: AnimatedTextKit(
+                  totalRepeatCount: 3,
+                  animatedTexts: [
+                    FlickerAnimatedText('Walls'),
+                  ],
+                  onFinished: () {
+                    setState(() {
+                      ww = true;
+                    });
+                  },
+                ),
               ),
-              child: AnimatedTextKit(
-                totalRepeatCount: 3,
-                animatedTexts: [
-                  FlickerAnimatedText('Walls'),
-                ],
-                onFinished: () {
-                  setState(() {
-                    ww = true;
-                  });
-                },
+            )
+          : TextButton(
+              onPressed: () {
+                setState(() {
+                  ww = false;
+                });
+              },
+              child: Text(
+                'Walls',
+                style: TextStyle(
+                  fontSize: 90,
+                  color: Colors.white,
+                  shadows: [
+                    Shadow(
+                      blurRadius: 7.0,
+                      color: Colors.white,
+                      offset: Offset(0, 0),
+                    ),
+                  ],
+                ),
               ),
             ),
-          )
-        : TextButton(
-            onPressed: () {
-              setState(() {
-                ww = false;
-              });
-            },
-            child: Text(
-              'Walls',
-              style: TextStyle(
-                fontSize: 90,
-                color: Colors.white,
-                shadows: [
-                  Shadow(
-                    blurRadius: 7.0,
-                    color: Colors.white,
-                    offset: Offset(0, 0),
-                  ),
-                ],
-              ),
-            ),
-          ),
     );
   }
-  Future<void> _launchURL_vihan() async {
-    final url = "https://github.com/vihanagarwal18";
-    final Uri uri = Uri(
-        scheme: 'https',
-        host: 'github.com',
-        path: '/vihanagarwal18');
-    if (Platform.isAndroid) {
-      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-        throw 'Could not launch $url';
-      }
-    }
 
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  Future<void> _launchURL_gauransh() async {
-    final url = "https://github.com/gauransh18";
-    final Uri uri = Uri(
-        scheme: 'https',
-        host: 'github.com',
-        path: '/gauransh18');
+  Future<void> _launchURL(
+      String url, String scheme, String host, String path) async {
+    final Uri uri = Uri(scheme: scheme, host: host, path: path);
     if (Platform.isAndroid) {
       if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
         throw 'Could not launch $url';
