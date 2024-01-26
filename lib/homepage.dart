@@ -74,82 +74,74 @@ class _HomepageState extends State<Homepage> {
               );
             },
           ),
-          ExpandableNotifier(
-              child:Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: <Widget>[
-                      ScrollOnExpand(
-                        theme: ExpandableThemeData.defaults,
-                        scrollOnExpand: true,
-                        scrollOnCollapse: false,
-                        child:ExpandablePanel(
-                          header: Text(
-                              'know the Developers',
-                              style:TextStyle(
-                                color: Colors.white,
-                                backgroundColor:Color.fromARGB(255, 17, 17, 17),
-                              ),
-                          ),
-                          collapsed: Container(),//Text(
-                          //   'Know the Developers',
-                          //   style:TextStyle(
-                          //     color: Colors.white,
-                          //   ),
-                          // ),
-                          expanded: Container(
-                            color: Color.fromARGB(255, 17, 17, 17),
-                            child: Column(
-                              children: [
-                                TextButton(
-                                  onPressed: () async {
-                                    _launchURL();
-                                  },
-                                  child: Text(
-                                    'Vihan Agarwal',
-                                    style:TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
+          Container(
+            color: Color.fromARGB(255, 17, 17, 17),
+            child: ExpandableNotifier(
+                child:Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    child: Column(
+                      children: <Widget>[
+                        ScrollOnExpand(
+                          theme: ExpandableThemeData.defaults,
+                          scrollOnExpand: true,
+                          scrollOnCollapse: false,
+                          child:ExpandablePanel(
+                            header: Text(
+                                'know the Developers',
+                                style:TextStyle(
+                                  color: Colors.white,
+                                  backgroundColor:Color.fromARGB(255, 17, 17, 17),
                                 ),
-                                Padding(padding:EdgeInsets.all(10)),
-                                TextButton(
-                                  onPressed: (){},
-                                  child: Text(
-                                      'Gauransh Sharma',
+                            ),
+                            collapsed: Container(
+                              color: Color.fromARGB(255, 17, 17, 17),
+                            ),
+                            expanded: Container(
+                              color: Color.fromARGB(255, 17, 17, 17),
+                              child: Column(
+                                children: [
+                                  TextButton(
+                                    onPressed: () async {
+                                      _launchURL_vihan();
+                                    },
+                                    child: Text(
+                                      'Vihan Agarwal',
                                       style:TextStyle(
                                         color: Colors.white,
-                                      )
+                                      ),
+                                    ),
                                   ),
-                                ),
-                                Padding(padding:EdgeInsets.all(10)),
-                              ],
+                                  Padding(padding:EdgeInsets.all(10)),
+                                  TextButton(
+                                    onPressed: () async{
+                                      _launchURL_gauransh();
+                                    },
+                                    child: Text(
+                                        'Gauransh Sharma',
+                                        style:TextStyle(
+                                          color: Colors.white,
+                                        )
+                                    ),
+                                  ),
+                                  Padding(padding:EdgeInsets.all(10)),
+                                ],
+                              ),
                             ),
-                          ),
-                        ) ,
-                      ),
-                    ],
+                          ) ,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+            ),
           ),
-          // ListTile(
-          //   title: Row(
-          //     children: [
-          //       Text(
-          //         'Know the Developers',
-          //         style: TextStyle(
-          //           color: Colors.white,
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          //   onTap: (){
-          //     showAboutAppDialog_developer(context);
-          //   },
-          // ),
+          Container(
+            height: 100,
+            alignment: Alignment.bottomCenter,
+            color: Colors.redAccent,
+          ),
         ],
       ),
       child: RefreshIndicator(
@@ -367,12 +359,31 @@ class _HomepageState extends State<Homepage> {
           ),
     );
   }
-  Future<void> _launchURL() async {
+  Future<void> _launchURL_vihan() async {
     final url = "https://github.com/vihanagarwal18";
     final Uri uri = Uri(
         scheme: 'https',
         host: 'github.com',
         path: '/vihanagarwal18');
+    if (Platform.isAndroid) {
+      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+        throw 'Could not launch $url';
+      }
+    }
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  Future<void> _launchURL_gauransh() async {
+    final url = "https://github.com/gauransh18";
+    final Uri uri = Uri(
+        scheme: 'https',
+        host: 'github.com',
+        path: '/gauransh18');
     if (Platform.isAndroid) {
       if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
         throw 'Could not launch $url';
