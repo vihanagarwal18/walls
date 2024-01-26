@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'dart:convert';
-
+import 'dart:io' show Platform;
 import 'package:Walls/fullscreen_image.dart';
 import 'package:Walls/liked_images.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:url_launcher/url_launcher.dart';
 import 'firebase_services.dart';
 
 class Homepage extends StatefulWidget {
@@ -99,11 +99,34 @@ class _HomepageState extends State<Homepage> {
                           //     color: Colors.white,
                           //   ),
                           // ),
-                          expanded: Text(
-                              'hello vihan',
-                              style:TextStyle(
-                                color: Colors.white,
-                              )
+                          expanded: Container(
+                            color: Color.fromARGB(255, 17, 17, 17),
+                            child: Column(
+                              children: [
+                                TextButton(
+                                  onPressed: () async {
+                                    _launchURL();
+                                  },
+                                  child: Text(
+                                    'Vihan Agarwal',
+                                    style:TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                Padding(padding:EdgeInsets.all(10)),
+                                TextButton(
+                                  onPressed: (){},
+                                  child: Text(
+                                      'Gauransh Sharma',
+                                      style:TextStyle(
+                                        color: Colors.white,
+                                      )
+                                  ),
+                                ),
+                                Padding(padding:EdgeInsets.all(10)),
+                              ],
+                            ),
                           ),
                         ) ,
                       ),
@@ -112,45 +135,6 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
           ),
-          ExpandableNotifier(
-            child:Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Card(
-                clipBehavior: Clip.antiAlias,
-                child: Column(
-                  children: <Widget>[
-                    ScrollOnExpand(
-                      theme: ExpandableThemeData.defaults,
-                      scrollOnExpand: true,
-                      scrollOnCollapse: false,
-                      child:ExpandablePanel(
-                        header: Text(
-                          'know the Developers',
-                          style:TextStyle(
-                            color: Colors.white,
-                            backgroundColor:Color.fromARGB(255, 17, 17, 17),
-                          ),
-                        ),
-                        collapsed: Container(),//Text(
-                        //   'Know the Developers',
-                        //   style:TextStyle(
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
-                        expanded: Text(
-                            'hello vihan',
-                            style:TextStyle(
-                              color: Colors.white,
-                            )
-                        ),
-                      ) ,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
           // ListTile(
           //   title: Row(
           //     children: [
@@ -381,6 +365,24 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
           ),
-  );
-}
+    );
+  }
+  Future<void> _launchURL() async {
+    final url = "https://github.com/vihanagarwal18";
+    final Uri uri = Uri(
+        scheme: 'https',
+        host: 'github.com',
+        path: '/vihanagarwal18');
+    if (Platform.isAndroid) {
+      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+        throw 'Could not launch $url';
+      }
+    }
+
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
