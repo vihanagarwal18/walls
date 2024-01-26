@@ -120,17 +120,21 @@ class _HomepageState extends State<Homepage> {
                                                     Icons.link,
                                                     color: Colors.white,
                                                   ),
-                                                  Text(
-                                                    'Vihan Agarwal',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10, right: 5),
+                                                    child: Text(
+                                                      'Vihan Agarwal',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                            Padding(
-                                                padding: EdgeInsets.all(10)),
+                                          
                                             TextButton(
                                               onPressed: () async {
                                                 _launchURL(
@@ -145,15 +149,20 @@ class _HomepageState extends State<Homepage> {
                                                     Icons.link,
                                                     color: Colors.white,
                                                   ),
-                                                  Text('Gauransh Sharma',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      )),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            left: 10, right: 5),
+                                                    child: Text(
+                                                        'Gauransh Sharma',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                        )),
+                                                  ),
                                                 ],
                                               ),
                                             ),
-                                            Padding(
-                                                padding: EdgeInsets.all(10)),
+                                            
                                           ],
                                         ),
                                       ),
@@ -360,51 +369,55 @@ class _HomepageState extends State<Homepage> {
   Widget heading() {
     return Center(
       child: ww == false
-          ? SizedBox(
-              width: 250.0,
-              child: DefaultTextStyle(
-                style: const TextStyle(
-                  fontSize: 90,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 7.0,
-                      color: Colors.white,
-                      offset: Offset(0, 0),
-                    ),
-                  ],
-                ),
-                child: AnimatedTextKit(
-                  totalRepeatCount: 3,
-                  animatedTexts: [
-                    FlickerAnimatedText('Walls'),
-                  ],
-                  onFinished: () {
-                    setState(() {
-                      ww = true;
-                    });
-                  },
+          ? Center(
+              child: Container(
+                width: 250.0,
+                child: DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 80,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 7.0,
+                        color: Colors.white,
+                        offset: Offset(0, 0),
+                      ),
+                    ],
+                  ),
+                  child: AnimatedTextKit(
+                    totalRepeatCount: 2,
+                    animatedTexts: [
+                      FlickerAnimatedText('Walls'),
+                    ],
+                    onFinished: () {
+                      setState(() {
+                        ww = true;
+                      });
+                    },
+                  ),
                 ),
               ),
             )
-          : TextButton(
-              onPressed: () {
-                setState(() {
-                  ww = false;
-                });
-              },
-              child: Text(
-                'Walls',
-                style: TextStyle(
-                  fontSize: 90,
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 7.0,
-                      color: Colors.white,
-                      offset: Offset(0, 0),
-                    ),
-                  ],
+          : Center(
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    ww = false;
+                  });
+                },
+                child: Text(
+                  'Walls',
+                  style: TextStyle(
+                    fontSize: 80,
+                    color: Colors.white,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 7.0,
+                        color: Colors.white,
+                        offset: Offset(0, 0),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
