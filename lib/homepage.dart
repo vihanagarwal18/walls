@@ -81,57 +81,60 @@ class _HomepageState extends State<Homepage> {
                   padding: EdgeInsets.all(10.0),
                   child: Card(
                     clipBehavior: Clip.antiAlias,
-                    child: Column(
-                      children: <Widget>[
-                        ScrollOnExpand(
-                          theme: ExpandableThemeData.defaults,
-                          scrollOnExpand: true,
-                          scrollOnCollapse: false,
-                          child:ExpandablePanel(
-                            header: Text(
-                                'know the Developers',
-                                style:TextStyle(
-                                  color: Colors.white,
-                                  backgroundColor:Color.fromARGB(255, 17, 17, 17),
-                                ),
-                            ),
-                            collapsed: Container(
-                              color: Color.fromARGB(255, 17, 17, 17),
-                            ),
-                            expanded: Container(
-                              color: Color.fromARGB(255, 17, 17, 17),
-                              child: Column(
-                                children: [
-                                  TextButton(
-                                    onPressed: () async {
-                                      _launchURL_vihan();
-                                    },
-                                    child: Text(
-                                      'Vihan Agarwal',
-                                      style:TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                    child: Container(
+                      color: Color.fromARGB(255, 17, 17, 17),
+                      child: Column(
+                        children: <Widget>[
+                          ScrollOnExpand(
+                            theme: ExpandableThemeData.defaults,
+                            scrollOnExpand: true,
+                            scrollOnCollapse: false,
+                            child:ExpandablePanel(
+                              header: Text(
+                                  'Know the Developers',
+                                  style:TextStyle(
+                                    color: Colors.white,
+                                    backgroundColor:Color.fromARGB(255, 17, 17, 17),
                                   ),
-                                  Padding(padding:EdgeInsets.all(10)),
-                                  TextButton(
-                                    onPressed: () async{
-                                      _launchURL_gauransh();
-                                    },
-                                    child: Text(
-                                        'Gauransh Sharma',
+                              ),
+                              collapsed: Container(
+                                color: Color.fromARGB(255, 17, 17, 17),
+                              ),
+                              expanded: Container(
+                                color: Color.fromARGB(255, 17, 17, 17),
+                                child: Column(
+                                  children: [
+                                    TextButton(
+                                      onPressed: () async {
+                                        _launchURL_vihan();
+                                      },
+                                      child: Text(
+                                        'Vihan Agarwal',
                                         style:TextStyle(
                                           color: Colors.white,
-                                        )
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(padding:EdgeInsets.all(10)),
-                                ],
+                                    Padding(padding:EdgeInsets.all(10)),
+                                    TextButton(
+                                      onPressed: () async{
+                                        _launchURL_gauransh();
+                                      },
+                                      child: Text(
+                                          'Gauransh Sharma',
+                                          style:TextStyle(
+                                            color: Colors.white,
+                                          )
+                                      ),
+                                    ),
+                                    Padding(padding:EdgeInsets.all(10)),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ) ,
-                        ),
-                      ],
+                            ) ,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
