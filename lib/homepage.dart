@@ -24,14 +24,6 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   List<String> images_list = [];
   bool ww = false;
-  var list1=[
-    'Know the Developers',
-    'Vihan Agarwal',
-    'Gauransh Sharma'
-  ];
-  var list2=[
-
-  ];
 
   final _advancedDrawerController = AdvancedDrawerController();
   @override
@@ -108,23 +100,43 @@ class _HomepageState extends State<Homepage> {
                                       onPressed: () async {
                                         _launchURL_vihan();
                                       },
-                                      child: Text(
-                                        'Vihan Agarwal',
-                                        style:TextStyle(
-                                          color: Colors.white,
-                                        ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.link,
+                                            color: Colors.white,
+                                          ),
+                                          Padding(padding: EdgeInsets.fromLTRB(10, 0, 5, 0)),
+                                          Text(
+                                            'Vihan Agarwal',
+                                            style:TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     Padding(padding:EdgeInsets.all(10)),
-                                    TextButton(
-                                      onPressed: () async{
-                                        _launchURL_gauransh();
-                                      },
-                                      child: Text(
-                                          'Gauransh Sharma',
-                                          style:TextStyle(
+                                    Container(
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.link,
                                             color: Colors.white,
-                                          )
+                                          ),
+                                          //Padding(padding: EdgeInsets.fromLTRB(10, 0, 5, 0)),
+                                          TextButton(
+                                            onPressed: () async{
+                                              _launchURL_gauransh();
+                                            },
+                                            child: Text(
+                                                'Gauransh Sharma',
+                                                style:TextStyle(
+                                                  color: Colors.white,
+                                                )
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     Padding(padding:EdgeInsets.all(10)),
