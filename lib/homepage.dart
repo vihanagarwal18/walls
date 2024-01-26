@@ -114,11 +114,19 @@ class _HomepageState extends State<Homepage> {
                                                     'github.com',
                                                     '/vihanagarwal18');
                                               },
-                                              child: Text(
-                                                'Vihan Agarwal',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                ),
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.link,
+                                                    color: Colors.white,
+                                                  ),
+                                                  Text(
+                                                    'Vihan Agarwal',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                             Padding(
@@ -131,10 +139,18 @@ class _HomepageState extends State<Homepage> {
                                                     'github.com',
                                                     '/gauransh18');
                                               },
-                                              child: Text('Gauransh Sharma',
-                                                  style: TextStyle(
+                                              child: Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.link,
                                                     color: Colors.white,
-                                                  )),
+                                                  ),
+                                                  Text('Gauransh Sharma',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      )),
+                                                ],
+                                              ),
                                             ),
                                             Padding(
                                                 padding: EdgeInsets.all(10)),
