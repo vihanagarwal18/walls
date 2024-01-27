@@ -1,49 +1,94 @@
 {
-	"names":[
-		{
-			"pic":"1.png"
-		},
-		{
-			"pic":"2.png"
-		},
-		{
-			"pic":"3.png"
-		},
-		{
-			"pic":"4.png"
-		},
-		{
-			"pic":"5.png"
-		},
-		{
-			"pic":"6.png"
-		},
-		{
-			"pic":"7.png"
-		},
-		{
-			"pic":"8.png"
-		},
-		{
-			"pic":"9.png"
-		},
-		{
-			"pic":"10.png"
-		},
-		{
-			"pic":"11.png"
-		},
-		{
-			"pic":"12.png"
-		},
-		{
-			"pic":"13.png"
-		},
-		{
-			"pic":"14.png"
-		},
-		{
-			"pic":"15.png"
-		}
-	]
+  "names": [
+    {
+      "pic": "Storm Chaser.png"
+    },
+    {
+      "pic": "Winding.png"
+    },
+    {
+      "pic": "Spring.png"
+    },
+    {
+      "pic": "Pink Horizon.png"
+    },
+    {
+      "pic": "Sky Scrapered.png"
+    },
+    {
+      "pic": "Purple Haze.png"
+    },
+    {
+      "pic": "ADV.png"
+    },
+    {
+      "pic": "blackhole.png"
+    },
+    {
+      "pic": "Blue night.png"
+    },
+    {
+      "pic": "court.png"
+    },
+    {
+      "pic": "Doodle-Do.png"
+    },
+    {
+      "pic": "Froggyman.png"
+    },
+    {
+      "pic": "funkyblack.png"
+    },
+    {
+      "pic": "Galactic Solitude.png"
+    },
+    {
+      "pic": "ghuchpuch.png"
+    },
+    {
+      "pic": "Stripes.png"
+    },
+    {
+      "pic": "Spidey Rain.png"
+    },
+    {
+      "pic": "Tallbuildings.png"
+    },
+    {
+      "pic": "rocketlaunch.png"
+    },
+    {
+      "pic": "Rocky Retreat.png"
+    },
+    {
+      "pic": "Slothy.png"
+    },
+    {
+      "pic": "Spring-ab.png"
+    },
+    {
+      "pic": "Redsploch.png"
+    },
+    {
+      "pic": "xfg.png"
+    },
+    {
+      "pic": "Record.png"
+    },
+    {
+      "pic ": "Lookblack.png"
+    },
+    {
+      "pic": "Grace.png"
+    },
+    {
+      "pic": "Purple Scrolls.png"
+    },
+    {
+      "pic": "Red Scrolls.png"
+    },
+    {
+      "pic": "goodjob.png"
+    }
+  ]
 }

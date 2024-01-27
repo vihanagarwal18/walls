@@ -17,7 +17,6 @@ class _LikedWallpapersPageState extends State<LikedWallpapersPage> {
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 17, 17, 17),
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         foregroundColor: Colors.white,
         title: Text('Liked Wallpapers',
@@ -32,7 +31,8 @@ class _LikedWallpapersPageState extends State<LikedWallpapersPage> {
         onRefresh: () async {
           setState(() {});
         },
-        child: MasonryGridView.builder(
+        child:
+        MasonryGridView.builder(
           gridDelegate:  SliverSimpleGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
           ),

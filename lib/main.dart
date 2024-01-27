@@ -11,7 +11,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/services.dart';
 // ignore_for_file: prefer_const_constructors
 
-final navigatorKey = GlobalKey<NavigatorState>();
+final navigatorKey= GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

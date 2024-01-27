@@ -193,7 +193,7 @@ class _HomepageState extends State<Homepage> {
                   "Github • V1.0",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -201,55 +201,55 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
       ),
-      child: RefreshIndicator(
+      child: Scaffold(
+        // extendBodyBehindAppBar: true,
+        // extendBody: true,
+        backgroundColor: Color.fromARGB(255, 17, 17, 17),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Color.fromARGB(150, 17, 17, 17),
+          //backgroundColor: Colors.transparent,
+          title: Text(
+            'Walls',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: _handleMenuButtonPressed,
+            icon: ValueListenableBuilder<AdvancedDrawerValue>(
+              valueListenable: _advancedDrawerController,
+              builder: (_, value, __) {
+                return AnimatedSwitcher(
+                  duration: Duration(seconds: 1),
+                  child: Icon(
+                    color: Colors.white,
+                    value.visible ? Icons.clear : Icons.menu,
+                    key: ValueKey<bool>(value.visible),
+                  ),
+                );
+              },
+            ),
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.favorite, color: Colors.red),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => LikedWallpapersPage()),
+                );
+              },
+            ),
+          ],
+        ),
+        body: RefreshIndicator(
         onRefresh: () async {
           setState(() {});
         },
-        child: Scaffold(
-          extendBodyBehindAppBar: true,
-          //extendBody: true,
-          backgroundColor: Color.fromARGB(255, 17, 17, 17),
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Color.fromARGB(150, 17, 17, 17),
-            //backgroundColor: Colors.transparent,
-            title: Text(
-              'Walls',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            centerTitle: true,
-            leading: IconButton(
-              onPressed: _handleMenuButtonPressed,
-              icon: ValueListenableBuilder<AdvancedDrawerValue>(
-                valueListenable: _advancedDrawerController,
-                builder: (_, value, __) {
-                  return AnimatedSwitcher(
-                    duration: Duration(seconds: 1),
-                    child: Icon(
-                      color: Colors.white,
-                      value.visible ? Icons.clear : Icons.menu,
-                      key: ValueKey<bool>(value.visible),
-                    ),
-                  );
-                },
-              ),
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.favorite, color: Colors.red),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LikedWallpapersPage()),
-                  );
-                },
-              ),
-            ],
-          ),
-          body: MasonryGridView.builder(
+          child: MasonryGridView.builder(
             //itemCount: 15,
             itemCount: images_list.length,
             gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
@@ -336,27 +336,51 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  // void getItemList() async {
+  //   // print("Fetching started");
+  //   String url =
+  //       "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+  //   var response = await http.get(Uri.parse(url));
+  //   if (response.statusCode == 200) {
+  //     var jsonData = jsonDecode(response.body) as List<dynamic>;
+  //     print(jsonData);
+  //     List<String> aff = [];
+  //     for (var item in jsonData) {
+  //       String name = item['pic'];
+  //       aff.add(name);
+  //     }
+  //     //images_list=aff;
+  //     setState(() {
+  //       images_list = aff;
+  //     });
+  //     // return aff;
+  //   } else {
+  //     ("Failed to fetch data. Status code: ${response.statusCode}");
+  //   }
+  // }
+
   void getItemList() async {
-    // print("Fetching started");
-    String url =
-        "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
-    var response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body) as List<dynamic>;
-      List<String> aff = [];
-      for (var item in jsonData) {
+  // print("Fetching started");
+  String url =
+      "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+  var response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    var jsonData = jsonDecode(response.body) as List<dynamic>;
+    List<String> aff = [];
+    for (var item in jsonData) {
+      // Check if 'pic' is not null before using it
+      if (item['pic'] != null) {
         String name = item['pic'];
         aff.add(name);
       }
-      //images_list=aff;
-      setState(() {
-        images_list = aff;
-      });
-      // return aff;
-    } else {
-      ("Failed to fetch data. Status code: ${response.statusCode}");
     }
+    setState(() {
+      images_list = aff;
+    });
+  } else {
+    print("Failed to fetch data. Status code: ${response.statusCode}");
   }
+}
 
   void _handleMenuButtonPressed() {
     setState(() {
