@@ -362,7 +362,8 @@ class _HomepageState extends State<Homepage> {
   void getItemList() async {
   // print("Fetching started");
   String url =
-      "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+      // "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+     "https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
   var response = await http.get(Uri.parse(url));
   if (response.statusCode == 200) {
     var jsonData = jsonDecode(response.body) as List<dynamic>;

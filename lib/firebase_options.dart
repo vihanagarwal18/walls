@@ -47,28 +47,28 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAr9M9ChEQ8sYg-zVzsaqNGC2IkEpGFNh8',
-    appId: '1:1077990734139:web:99feba0c1c834f200ddf1e',
-    messagingSenderId: '1077990734139',
-    projectId: 'walls-1809',
-    authDomain: 'walls-1809.firebaseapp.com',
-    storageBucket: 'walls-1809.appspot.com',
+    apiKey: 'AIzaSyA1DtetnP1nL8dOZ-bA6eUEKkFe1nZbido',
+    appId: '1:58298262525:web:67bc4cc9d2bd740aa96f94',
+    messagingSenderId: '58298262525',
+    projectId: 'trywallsnow',
+    authDomain: 'trywallsnow.firebaseapp.com',
+    storageBucket: 'trywallsnow.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB4poaj-EXSOVkvQaUCPzrsWKQWWbfyVmg',
-    appId: '1:1077990734139:android:f92e86afc5d940a50ddf1e',
-    messagingSenderId: '1077990734139',
-    projectId: 'walls-1809',
-    storageBucket: 'walls-1809.appspot.com',
+    apiKey: 'AIzaSyBo3DeDIA53SgPeR-1kJ4_Sux1nFA9rOnE',
+    appId: '1:58298262525:android:3faf3db599960490a96f94',
+    messagingSenderId: '58298262525',
+    projectId: 'trywallsnow',
+    storageBucket: 'trywallsnow.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD5gmfsPK3Dw2c0bvEwkqXAJ-gzad3oMcs',
-    appId: '1:1077990734139:ios:02b8a24bc86fee6c0ddf1e',
-    messagingSenderId: '1077990734139',
-    projectId: 'walls-1809',
-    storageBucket: 'walls-1809.appspot.com',
-    iosBundleId: 'com.example.wallpaper',
+    apiKey: 'AIzaSyAB0Z-3HJvAg9Pus5UtRr1mtucsXOWDAF8',
+    appId: '1:58298262525:ios:3edbde6e1bd9fdefa96f94',
+    messagingSenderId: '58298262525',
+    projectId: 'trywallsnow',
+    storageBucket: 'trywallsnow.appspot.com',
+    iosBundleId: 'com.gauranshsharma.walls',
   );
 }
