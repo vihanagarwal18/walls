@@ -58,7 +58,6 @@ dependencies:
   fluttertoast: ^8.2.4
   google_fonts: ^4.0.4
   universal_html: ^2.0.8
-  http: ^0.13.1 
 
 
 dev_dependencies:

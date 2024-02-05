@@ -18,10 +18,8 @@ import 'package:Walls/firebase_services.dart';
 import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:html' as html;
 import 'package:universal_html/html.dart' as html;
 import 'package:http/http.dart' as http;
-
 
 
 class FullScreenImage extends ConsumerStatefulWidget {
@@ -136,35 +134,49 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () async {
-                  // var dio = Dio();
-                  // var tempDir = await getTemporaryDirectory();
-                  // var tempPath = tempDir.path;
-                  // var fullPath = '$tempPath/image.png';
 
-                  // await dio.download(imageUrl!, fullPath).then((_) {
-                  //   GallerySaver.saveImage(fullPath).then((bool? success) {
-                  //     Fluttertoast.showToast(
-                  //         msg: "😀 Wallpaper saved to gallery!",
-                  //         toastLength: Toast.LENGTH_SHORT,
-                  //         gravity: ToastGravity.BOTTOM,
-                  //         timeInSecForIosWeb: 1,
-                  //         backgroundColor: Colors.green,
-                  //         textColor: Colors.white,
-                  //         fontSize: 16.0);
-                  //     // FloatingSnackBar(
-                  //     //   message: 'Wallpaper saved to gallery!✅',
-                  //     //   context: context,
-                  //     //   textColor: Colors.black,
-                  //     //   textStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                  //     //   duration: const Duration(milliseconds: 4000),
-                  //     //   backgroundColor: Colors.white,
-                  //     // );
-                  //   });
-                  // });
 
                   if (kIsWeb) {
                     downloadImage(imageUrl.toString(), imagename.toString());
+                    Fluttertoast.showToast(
+                          msg: "Download Started!",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
                   }
+                  if(!kIsWeb){
+                  var dio = Dio();
+                  var tempDir = await getTemporaryDirectory();
+                  var tempPath = tempDir.path;
+                  var fullPath = '$tempPath/image.png';
+
+                  await dio.download(imageUrl!, fullPath).then((_) {
+                    GallerySaver.saveImage(fullPath).then((bool? success) {
+                      Fluttertoast.showToast(
+                          msg: "😀 Wallpaper saved to gallery!",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.green,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                      // FloatingSnackBar(
+                      //   message: 'Wallpaper saved to gallery!✅',
+                      //   context: context,
+                      //   textColor: Colors.black,
+                      //   textStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                      //   duration: const Duration(milliseconds: 4000),
+                      //   backgroundColor: Colors.white,
+                      // );
+                    });
+                  });
+
+                  }
+
+                  
                 },
                 child: Column(
                   children: [

@@ -13,7 +13,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'firebase_services.dart';
-import 'dart:ui_web' as ui_web;
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
