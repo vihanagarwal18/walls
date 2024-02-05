@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously
+import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:Walls/providers.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -16,6 +18,11 @@ import 'package:Walls/firebase_services.dart';
 import 'package:async_wallpaper/async_wallpaper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
+import 'package:http/http.dart' as http;
+
+
 
 class FullScreenImage extends ConsumerStatefulWidget {
   final String imageName;
@@ -46,9 +53,10 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
     final isLiked = ref.watch(likeStateProvider(widget.imageName));
 
     return ClipRRect(
-      // Add ClipRRect here
       borderRadius: BorderRadius.circular(14.0), // Set the border radius
       child: Container(
+        constraints: BoxConstraints(maxWidth: 365.0, maxHeight: 711.4),
+
         // width: w * 1 *0.8,  //(width * 0.80 < 1080) ? width * 0.80 : 1080, //double.infinity,
         // height: (w *0.8* 1.4222), // +  171.805,
         width: w * 0.8,
@@ -67,7 +75,7 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
                 if (snapshot.connectionState == ConnectionState.done &&
                     snapshot.hasData) {
                   imageUrl = snapshot.data;
-                  imageWidget =  CachedNetworkImage(
+                  imageWidget = CachedNetworkImage(
                       imageUrl: snapshot.data!,
                       fit: BoxFit.fill,
                       placeholder: (context, url) =>
@@ -81,11 +89,11 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return _buildLoadingIndicator();
-                }  else {
+                } else {
                   return _buildErrorIndicator();
                 }
 
-                 return Expanded(
+                return Expanded(
                   child: Column(
                     children: [
                       imageWidget,
@@ -111,7 +119,11 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
         padding: const EdgeInsets.only(top: 5.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            //  if(!Platform.isAndroid)
+            // SizedBox(width: 0.,),
             Padding(
               padding: const EdgeInsets.only(top: 5),
               child: ElevatedButton(
@@ -124,31 +136,35 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () async {
-                  var dio = Dio();
-                  var tempDir = await getTemporaryDirectory();
-                  var tempPath = tempDir.path;
-                  var fullPath = '$tempPath/image.png';
+                  // var dio = Dio();
+                  // var tempDir = await getTemporaryDirectory();
+                  // var tempPath = tempDir.path;
+                  // var fullPath = '$tempPath/image.png';
 
-                  await dio.download(imageUrl!, fullPath).then((_) {
-                    GallerySaver.saveImage(fullPath).then((bool? success) {
-                      Fluttertoast.showToast(
-                          msg: "😀 Wallpaper saved to gallery!",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.green,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
-                      // FloatingSnackBar(
-                      //   message: 'Wallpaper saved to gallery!✅',
-                      //   context: context,
-                      //   textColor: Colors.black,
-                      //   textStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-                      //   duration: const Duration(milliseconds: 4000),
-                      //   backgroundColor: Colors.white,
-                      // );
-                    });
-                  });
+                  // await dio.download(imageUrl!, fullPath).then((_) {
+                  //   GallerySaver.saveImage(fullPath).then((bool? success) {
+                  //     Fluttertoast.showToast(
+                  //         msg: "😀 Wallpaper saved to gallery!",
+                  //         toastLength: Toast.LENGTH_SHORT,
+                  //         gravity: ToastGravity.BOTTOM,
+                  //         timeInSecForIosWeb: 1,
+                  //         backgroundColor: Colors.green,
+                  //         textColor: Colors.white,
+                  //         fontSize: 16.0);
+                  //     // FloatingSnackBar(
+                  //     //   message: 'Wallpaper saved to gallery!✅',
+                  //     //   context: context,
+                  //     //   textColor: Colors.black,
+                  //     //   textStyle: const TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                  //     //   duration: const Duration(milliseconds: 4000),
+                  //     //   backgroundColor: Colors.white,
+                  //     // );
+                  //   });
+                  // });
+
+                  if (kIsWeb) {
+                    downloadImage(imageUrl.toString(), imagename.toString());
+                  }
                 },
                 child: Column(
                   children: [
@@ -204,72 +220,72 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
                 ],
               ),
             ),
-            // if (!Platform.isIOS)
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  disabledForegroundColor: Colors.transparent,
-                  disabledBackgroundColor: Colors.transparent,
-                  shadowColor: Colors.transparent,
-                  surfaceTintColor: Colors.transparent,
-                  backgroundColor: Colors.transparent,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () async {
-                  var file =
-                      await DefaultCacheManager().getSingleFile(imageUrl!);
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Set Wallpaper'),
-                        content:
-                            Text('Where would you like to set the wallpaper?'),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('Home Screen'),
-                            onPressed: () async {
-                              Navigator.of(context).pop(); // Close the dialog
-                              await _setWallpaper(
-                                  file.path, AsyncWallpaper.HOME_SCREEN);
-                            },
-                          ),
-                          TextButton(
-                            child: Text('Lock Screen'),
-                            onPressed: () async {
-                              Navigator.of(context).pop(); // Close the dialog
-                              await _setWallpaper(
-                                  file.path, AsyncWallpaper.LOCK_SCREEN);
-                            },
-                          ),
-                          TextButton(
-                            child: Text('Both'),
-                            onPressed: () async {
-                              Navigator.of(context).pop(); // Close the dialog
-                              await _setWallpaper(
-                                  file.path, AsyncWallpaper.BOTH_SCREENS);
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: Column(
-                  children: [
-                    Icon(Icons.wallpaper),
-                    Text(
-                      'Use as',
-                      style: GoogleFonts.getFont(
-                        'Lato',
-                        color: Colors.white,
+            if (!kIsWeb)
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    disabledForegroundColor: Colors.transparent,
+                    disabledBackgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    surfaceTintColor: Colors.transparent,
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () async {
+                    var file =
+                        await DefaultCacheManager().getSingleFile(imageUrl!);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Set Wallpaper'),
+                          content: Text(
+                              'Where would you like to set the wallpaper?'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Home Screen'),
+                              onPressed: () async {
+                                Navigator.of(context).pop(); // Close the dialog
+                                await _setWallpaper(
+                                    file.path, AsyncWallpaper.HOME_SCREEN);
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Lock Screen'),
+                              onPressed: () async {
+                                Navigator.of(context).pop(); // Close the dialog
+                                await _setWallpaper(
+                                    file.path, AsyncWallpaper.LOCK_SCREEN);
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Both'),
+                              onPressed: () async {
+                                Navigator.of(context).pop(); // Close the dialog
+                                await _setWallpaper(
+                                    file.path, AsyncWallpaper.BOTH_SCREENS);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Icon(Icons.wallpaper),
+                      Text(
+                        'Use as',
+                        style: GoogleFonts.getFont(
+                          'Lato',
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
@@ -324,24 +340,62 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
       },
     );
   }
+
+  // void downloadImage(String url) {
+  //   // Extract the file name from the URL
+  //   final uri = Uri.parse(url);
+  //   final fileName = uri.pathSegments.last ?? 'download';
+
+  //   // Create an anchor element and trigger download
+  //   final anchor = html.AnchorElement(href: url)
+  //     ..setAttribute('download', fileName)
+  //     ..click();
+  // }
+
+  Future<void> downloadImage(String imageUrl, String imagename) async {
+    try {
+      // first we make a request to the url like you did
+      // in the android and ios version
+      final http.Response r = await http.get(
+        Uri.parse(imageUrl),
+      );
+      
+      // we get the bytes from the body
+      final data = r.bodyBytes;
+      // and encode them to base64
+      final base64data = base64Encode(data);
+      
+      // then we create and AnchorElement with the html package
+      final a = html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
+      
+      // set the name of the file we want the image to get
+      // downloaded to
+      a.download = imagename;
+      
+      // and we click the AnchorElement which downloads the image
+      a.click();
+      // finally we remove the AnchorElement
+      a.remove();
+    } catch (e) {
+      print(e);
+    }
 }
-
-
+}
 //Name of the image
 
- // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Row(
-                    //     children: [
-                    //       Text(
-                    //         imagename!.split('.').first,
-                    //         //imagename!,
-                    //         textAlign: TextAlign.left, // not working idk why
-                    //         style: TextStyle(
-                    //           fontSize: 15,
-                    //           color: Colors.white,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
+// Padding(
+//   padding: const EdgeInsets.all(8.0),
+//   child: Row(
+//     children: [
+//       Text(
+//         imagename!.split('.').first,
+//         //imagename!,
+//         textAlign: TextAlign.left, // not working idk why
+//         style: TextStyle(
+//           fontSize: 15,
+//           color: Colors.white,
+//         ),
+//       ),
+//     ],
+//   ),
+// ),
