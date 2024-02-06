@@ -382,7 +382,7 @@ class _FullScreenImageState extends ConsumerState<FullScreenImage> {
       
       // set the name of the file we want the image to get
       // downloaded to
-      a.download = imagename;
+      a.download = "download";
       
       // and we click the AnchorElement which downloads the image
       a.click();
