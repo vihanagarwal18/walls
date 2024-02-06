@@ -24,8 +24,8 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   List<String> images_list = [];
   bool ww = false;
-  var list1 = ['Know the Developers', 'Vihan Agarwal', 'Gauransh Sharma'];
-  var list2 = [];
+  // var list1 = ['Know the Developers', 'Vihan Agarwal', 'Gauransh Sharma'];
+  // var list2 = [];
 
   final _advancedDrawerController = AdvancedDrawerController();
   @override
@@ -372,7 +372,8 @@ class _HomepageState extends State<Homepage> {
       // Check if 'pic' is not null before using it
       if (item['pic'] != null) {
         String name = item['pic'];
-        aff.add(name);
+        aff.insert(0,name);
+        //aff.add(name);
       }
     }
     setState(() {
