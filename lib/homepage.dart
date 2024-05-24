@@ -78,7 +78,6 @@ class _HomepageState extends State<Homepage> {
                       );
                     },
                   ),
-
                   Container(
                     color: Color.fromARGB(255, 17, 17, 17),
                     child: ExpandableNotifier(
@@ -192,6 +191,17 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ),
                   ListTile(
+                    title: Text(
+                      'Upload Wallpaper',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      _showPasswordDialog(context);
+                    },
+                  ),
+                  ListTile(
                     title: Container(
                       padding: EdgeInsets.all(0),
                       alignment: Alignment.topLeft,
@@ -216,120 +226,6 @@ class _HomepageState extends State<Homepage> {
                       }
                     },
                   ),
-                  ListTile(
-                    title: Text(
-                      'Upload Wallpaper',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    onTap: () {
-                      _showPasswordDialog(context);
-                    },
-                  ),
-                  // Container(
-                  //   color: Color.fromARGB(255, 17, 17, 17),
-                  //   child: ExpandableNotifier(
-                  //     child: Padding(
-                  //       padding: EdgeInsets.all(10.0),
-                  //       child: Card(
-                  //         clipBehavior: Clip.antiAlias,
-                  //         child: Container(
-                  //           color: Color.fromARGB(255, 17, 17, 17),
-                  //           child: Column(
-                  //             children: <Widget>[
-                  //               ScrollOnExpand(
-                  //                 theme: ExpandableThemeData.defaults,
-                  //                 scrollOnExpand: true,
-                  //                 scrollOnCollapse: false,
-                  //                 child: Padding(
-                  //                   padding: const EdgeInsets.all(2.0),
-                  //                   child: ExpandablePanel(
-                  //                     header: Text(
-                  //                       'Know the Developers',
-                  //                       style: TextStyle(
-                  //                         color: Colors.white,
-                  //                         backgroundColor:
-                  //                             Color.fromARGB(255, 17, 17, 17),
-                  //                       ),
-                  //                     ),
-                  //                     collapsed: Container(
-                  //                       color: Color.fromARGB(255, 17, 17, 17),
-                  //                     ),
-                  //                     expanded: Container(
-                  //                       color: Color.fromARGB(255, 17, 17, 17),
-                  //                       child: Column(
-                  //                         children: [
-                  //                           TextButton(
-                  //                             onPressed: () async {
-                  //                               _launchURL(
-                  //                                   'https://github.com/vihanagarwal18',
-                  //                                   'https',
-                  //                                   'github.com',
-                  //                                   '/vihanagarwal18');
-                  //                             },
-                  //                             child: Row(
-                  //                               children: [
-                  //                                 Icon(
-                  //                                   Icons.link,
-                  //                                   color: Colors.white,
-                  //                                 ),
-                  //                                 Padding(
-                  //                                   padding:
-                  //                                       const EdgeInsets.only(
-                  //                                           left: 10, right: 5),
-                  //                                   child: Text(
-                  //                                     'Vihan Agarwal',
-                  //                                     style: TextStyle(
-                  //                                       color: Colors.white,
-                  //                                     ),
-                  //                                   ),
-                  //                                 ),
-                  //                               ],
-                  //                             ),
-                  //                           ),
-                                          
-                  //                           TextButton(
-                  //                             onPressed: () async {
-                  //                               _launchURL(
-                  //                                   "https://github.com/gauransh18",
-                  //                                   'https',
-                  //                                   'github.com',
-                  //                                   '/gauransh18');
-                  //                             },
-                  //                             child: Row(
-                  //                               children: [
-                  //                                 Icon(
-                  //                                   Icons.link,
-                  //                                   color: Colors.white,
-                  //                                 ),
-                  //                                 Padding(
-                  //                                   padding:
-                  //                                       const EdgeInsets.only(
-                  //                                           left: 10, right: 5),
-                  //                                   child: Text(
-                  //                                       'Gauransh Sharma',
-                  //                                       style: TextStyle(
-                  //                                         color: Colors.white,
-                  //                                       )),
-                  //                                 ),
-                  //                               ],
-                  //                             ),
-                  //                           ),
-                                            
-                  //                         ],
-                  //                       ),
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -490,29 +386,6 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // void getItemList() async {
-  //   // print("Fetching started");
-  //   String url =
-  //       "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
-  //   var response = await http.get(Uri.parse(url));
-  //   if (response.statusCode == 200) {
-  //     var jsonData = jsonDecode(response.body) as List<dynamic>;
-  //     print(jsonData);
-  //     List<String> aff = [];
-  //     for (var item in jsonData) {
-  //       String name = item['pic'];
-  //       aff.add(name);
-  //     }
-  //     //images_list=aff;
-  //     setState(() {
-  //       images_list = aff;
-  //     });
-  //     // return aff;
-  //   } else {
-  //     ("Failed to fetch data. Status code: ${response.statusCode}");
-  //   }
-  // }
-
   void getItemList() async {
     // print("Fetching started");
     String url =
@@ -578,25 +451,6 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // void _showSuccessDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         title: Text('Success'),
-  //         content: Text('Password is correct!'),
-  //         actions: [
-  //           TextButton(
-  //             child: Text('OK'),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
   void _showSuccessDialog(BuildContext context) {
     final TextEditingController _imageNameController = TextEditingController();
     final ImagePicker _picker = ImagePicker();
@@ -696,11 +550,21 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+
   Future<void> _uploadImageToFirebase(XFile imageFile, String imageName) async {
     try {
-      final storageRef =
-          FirebaseStorage.instance.ref().child('$imageName');
-      await storageRef.putFile(File(imageFile.path));
+      // Check if the file is of type image/png using mimeType and file extension
+      if (imageFile.mimeType != 'image/png' && !imageFile.name.endsWith('.png')) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please upload a PNG image')),
+        );
+        return;
+      }
+
+      final storageRef = FirebaseStorage.instance.ref().child('$imageName.png');
+      final metadata = SettableMetadata(contentType: 'image/png');
+
+      await storageRef.putFile(File(imageFile.path), metadata);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Image uploaded successfully')),
       );
