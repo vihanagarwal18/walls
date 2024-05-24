@@ -21,7 +21,7 @@ void main() async {
 
 
   await Firebase.initializeApp(
-    name: 'trywallsnow',
+    // name: 'trywallsnow',
     options: DefaultFirebaseOptions.currentPlatform,
   );
   if (!kIsWeb && Platform.isAndroid) {

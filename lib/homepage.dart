@@ -13,6 +13,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'firebase_services.dart';
+import 'package:flutter/foundation.dart'; // This provides the kIsWeb constant
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -90,82 +91,91 @@ class _HomepageState extends State<Homepage> {
                                   scrollOnCollapse: false,
                                   child: Padding(
                                     padding: const EdgeInsets.all(2.0),
-                                    child: ExpandablePanel(
-                                      header: Text(
-                                        'Know the Developers',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          backgroundColor:
-                                              Color.fromARGB(255, 17, 17, 17),
-                                        ),
-                                      ),
-                                      collapsed: Container(
-                                        color: Color.fromARGB(255, 17, 17, 17),
-                                      ),
-                                      expanded: Container(
-                                        color: Color.fromARGB(255, 17, 17, 17),
-                                        child: Column(
-                                          children: [
-                                            TextButton(
-                                              onPressed: () async {
-                                                _launchURL(
-                                                    'https://github.com/vihanagarwal18',
-                                                    'https',
-                                                    'github.com',
-                                                    '/vihanagarwal18');
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.link,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 10, right: 5),
-                                                    child: Text(
-                                                      'Vihan Agarwal',
-                                                      style: TextStyle(
+                                    child: Column(
+                                      children: [
+                                        ExpandablePanel(
+                                          header: Text(
+                                            'Know the Developers',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 17, 17, 17),
+                                            ),
+                                          ),
+                                          collapsed: Container(
+                                            color:
+                                                Color.fromARGB(255, 17, 17, 17),
+                                          ),
+                                          expanded: Container(
+                                            color:
+                                                Color.fromARGB(255, 17, 17, 17),
+                                            child: Column(
+                                              children: [
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    _launchURL(
+                                                        'https://github.com/vihanagarwal18',
+                                                        'https',
+                                                        'github.com',
+                                                        '/vihanagarwal18');
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.link,
                                                         color: Colors.white,
                                                       ),
-                                                    ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 10,
+                                                                right: 5),
+                                                        child: Text(
+                                                          'Vihan Agarwal',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () async {
+                                                    _launchURL(
+                                                        "https://github.com/gauransh18",
+                                                        'https',
+                                                        'github.com',
+                                                        '/gauransh18');
+                                                  },
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(
+                                                        Icons.link,
+                                                        color: Colors.white,
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                left: 10,
+                                                                right: 5),
+                                                        child: Text(
+                                                            'Gauransh Sharma',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                            )),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          
-                                            TextButton(
-                                              onPressed: () async {
-                                                _launchURL(
-                                                    "https://github.com/gauransh18",
-                                                    'https',
-                                                    'github.com',
-                                                    '/gauransh18');
-                                              },
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.link,
-                                                    color: Colors.white,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 10, right: 5),
-                                                    child: Text(
-                                                        'Gauransh Sharma',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                        )),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            
-                                          ],
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -174,6 +184,32 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                       ),
+                    ),
+                  ),
+                  ListTile(
+                    title: Container(
+                      child: kIsWeb
+                          ? TextButton(
+                              // onPressed: () {},
+                              onPressed: () async {
+                                Uri apkUrl =Uri.parse('');
+                                if (await canLaunchUrl(apkUrl)) {
+                                  await launchUrl(apkUrl);
+                                }
+                                else {
+                                  throw 'Could not launch $apkUrl';
+                                }
+                              },
+                              child: Text(
+                                'Download APK',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 17, 17, 17),
+                                ),
+                              ),
+                            )
+                          : SizedBox.shrink(),
                     ),
                   ),
                 ],
@@ -246,9 +282,9 @@ class _HomepageState extends State<Homepage> {
           ],
         ),
         body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {});
-        },
+          onRefresh: () async {
+            setState(() {});
+          },
           child: MasonryGridView.builder(
             //itemCount: 15,
             itemCount: images_list.length,
@@ -360,29 +396,29 @@ class _HomepageState extends State<Homepage> {
   // }
 
   void getItemList() async {
-  // print("Fetching started");
-  String url =
-      // "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
-     "https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
-  var response = await http.get(Uri.parse(url));
-  if (response.statusCode == 200) {
-    var jsonData = jsonDecode(response.body) as List<dynamic>;
-    List<String> aff = [];
-    for (var item in jsonData) {
-      // Check if 'pic' is not null before using it
-      if (item['pic'] != null) {
-        String name = item['pic'];
-        aff.insert(0,name);
-        //aff.add(name);
+    // print("Fetching started");
+    String url =
+        // "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+        "https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      var jsonData = jsonDecode(response.body) as List<dynamic>;
+      List<String> aff = [];
+      for (var item in jsonData) {
+        // Check if 'pic' is not null before using it
+        if (item['pic'] != null) {
+          String name = item['pic'];
+          aff.insert(0, name);
+          //aff.add(name);
+        }
       }
+      setState(() {
+        images_list = aff;
+      });
+    } else {
+      print("Failed to fetch data. Status code: ${response.statusCode}");
     }
-    setState(() {
-      images_list = aff;
-    });
-  } else {
-    print("Failed to fetch data. Status code: ${response.statusCode}");
   }
-}
 
   void _handleMenuButtonPressed() {
     setState(() {
