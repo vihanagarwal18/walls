@@ -19,7 +19,6 @@ final navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
   await Firebase.initializeApp(
     // name: 'trywallsnow',
     options: DefaultFirebaseOptions.currentPlatform,
@@ -36,6 +35,7 @@ void main() async {
 
   runApp(ProviderScope(
       child: MaterialApp(
+    title: "Walls",
     debugShowCheckedModeBanner: false,
     //home: Set_as_Wallpaper(),
     navigatorKey: navigatorKey,

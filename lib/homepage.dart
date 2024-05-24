@@ -78,6 +78,7 @@ class _HomepageState extends State<Homepage> {
                       );
                     },
                   ),
+
                   Container(
                     color: Color.fromARGB(255, 17, 17, 17),
                     child: ExpandableNotifier(
@@ -226,6 +227,109 @@ class _HomepageState extends State<Homepage> {
                       _showPasswordDialog(context);
                     },
                   ),
+                  // Container(
+                  //   color: Color.fromARGB(255, 17, 17, 17),
+                  //   child: ExpandableNotifier(
+                  //     child: Padding(
+                  //       padding: EdgeInsets.all(10.0),
+                  //       child: Card(
+                  //         clipBehavior: Clip.antiAlias,
+                  //         child: Container(
+                  //           color: Color.fromARGB(255, 17, 17, 17),
+                  //           child: Column(
+                  //             children: <Widget>[
+                  //               ScrollOnExpand(
+                  //                 theme: ExpandableThemeData.defaults,
+                  //                 scrollOnExpand: true,
+                  //                 scrollOnCollapse: false,
+                  //                 child: Padding(
+                  //                   padding: const EdgeInsets.all(2.0),
+                  //                   child: ExpandablePanel(
+                  //                     header: Text(
+                  //                       'Know the Developers',
+                  //                       style: TextStyle(
+                  //                         color: Colors.white,
+                  //                         backgroundColor:
+                  //                             Color.fromARGB(255, 17, 17, 17),
+                  //                       ),
+                  //                     ),
+                  //                     collapsed: Container(
+                  //                       color: Color.fromARGB(255, 17, 17, 17),
+                  //                     ),
+                  //                     expanded: Container(
+                  //                       color: Color.fromARGB(255, 17, 17, 17),
+                  //                       child: Column(
+                  //                         children: [
+                  //                           TextButton(
+                  //                             onPressed: () async {
+                  //                               _launchURL(
+                  //                                   'https://github.com/vihanagarwal18',
+                  //                                   'https',
+                  //                                   'github.com',
+                  //                                   '/vihanagarwal18');
+                  //                             },
+                  //                             child: Row(
+                  //                               children: [
+                  //                                 Icon(
+                  //                                   Icons.link,
+                  //                                   color: Colors.white,
+                  //                                 ),
+                  //                                 Padding(
+                  //                                   padding:
+                  //                                       const EdgeInsets.only(
+                  //                                           left: 10, right: 5),
+                  //                                   child: Text(
+                  //                                     'Vihan Agarwal',
+                  //                                     style: TextStyle(
+                  //                                       color: Colors.white,
+                  //                                     ),
+                  //                                   ),
+                  //                                 ),
+                  //                               ],
+                  //                             ),
+                  //                           ),
+                                          
+                  //                           TextButton(
+                  //                             onPressed: () async {
+                  //                               _launchURL(
+                  //                                   "https://github.com/gauransh18",
+                  //                                   'https',
+                  //                                   'github.com',
+                  //                                   '/gauransh18');
+                  //                             },
+                  //                             child: Row(
+                  //                               children: [
+                  //                                 Icon(
+                  //                                   Icons.link,
+                  //                                   color: Colors.white,
+                  //                                 ),
+                  //                                 Padding(
+                  //                                   padding:
+                  //                                       const EdgeInsets.only(
+                  //                                           left: 10, right: 5),
+                  //                                   child: Text(
+                  //                                       'Gauransh Sharma',
+                  //                                       style: TextStyle(
+                  //                                         color: Colors.white,
+                  //                                       )),
+                  //                                 ),
+                  //                               ],
+                  //                             ),
+                  //                           ),
+                                            
+                  //                         ],
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
