@@ -1,5 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
+import 'dart:io';
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:Walls/fullscreen_image.dart';
@@ -13,7 +13,11 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'firebase_services.dart';
-import 'package:flutter/foundation.dart'; // This provides the kIsWeb constant
+import 'package:flutter/foundation.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
+// This provides the kIsWeb constant
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -188,29 +192,39 @@ class _HomepageState extends State<Homepage> {
                   ),
                   ListTile(
                     title: Container(
+                      padding: EdgeInsets.all(0),
+                      alignment: Alignment.topLeft,
                       child: kIsWeb
-                          ? TextButton(
-                              // onPressed: () {},
-                              onPressed: () async {
-                                Uri apkUrl =Uri.parse('here link will come');
-                                if (await canLaunchUrl(apkUrl)) {
-                                  await launchUrl(apkUrl);
-                                }
-                                else {
-                                  throw 'Could not launch $apkUrl';
-                                }
-                              },
-                              child: Text(
-                                'Download APK',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 17, 17, 17),
-                                ),
+                          ? Text(
+                              'Download APK',
+                              style: TextStyle(
+                                color: Colors.white,
+                                backgroundColor:
+                                    Color.fromARGB(255, 17, 17, 17),
                               ),
                             )
                           : SizedBox.shrink(),
                     ),
+                    onTap: () async {
+                      Uri apkUrl = Uri.parse(
+                          'https://github.com/vihanagarwal18/walls/raw/master/app-release.apk');
+                      if (await canLaunchUrl(apkUrl)) {
+                        await launchUrl(apkUrl);
+                      } else {
+                        throw 'Could not launch $apkUrl';
+                      }
+                    },
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Upload Wallpaper',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onTap: () {
+                      _showPasswordDialog(context);
+                    },
                   ),
                 ],
               ),
@@ -426,6 +440,198 @@ class _HomepageState extends State<Homepage> {
     });
 
     _advancedDrawerController.showDrawer();
+  }
+
+  void _showPasswordDialog(BuildContext context) {
+    final TextEditingController _passwordController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Password'),
+          content: TextField(
+            controller: _passwordController,
+            obscureText: true,
+            decoration: InputDecoration(hintText: "Password"),
+          ),
+          actions: [
+            TextButton(
+              child: Text('Submit'),
+              onPressed: () {
+                if (_passwordController.text == "12345678") {
+                  Navigator.of(context).pop();
+                  _showSuccessDialog(context);
+                } else {
+                  Navigator.of(context).pop();
+                  _showErrorDialog(context);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // void _showSuccessDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: Text('Success'),
+  //         content: Text('Password is correct!'),
+  //         actions: [
+  //           TextButton(
+  //             child: Text('OK'),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
+  void _showSuccessDialog(BuildContext context) {
+    final TextEditingController _imageNameController = TextEditingController();
+    final ImagePicker _picker = ImagePicker();
+    XFile? _imageFile;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Success'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: _imageNameController,
+                    decoration: InputDecoration(hintText: "Enter image name"),
+                  ),
+                  Padding(padding: EdgeInsets.all(2)),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (Platform.isAndroid) {
+                        var status =
+                            await Permission.manageExternalStorage.status;
+                        print(
+                            'Manage External Storage Permission Status: $status');
+                        if (!status.isGranted) {
+                          status =
+                              await Permission.manageExternalStorage.request();
+                        }
+                        if (status.isGranted) {
+                          XFile? selectedImage = await _picker.pickImage(
+                              source: ImageSource.gallery);
+                          setState(() {
+                            _imageFile = selectedImage;
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Permission denied')),
+                          );
+                        }
+                      } else {
+                        var status = await Permission.photos.status;
+                        print('Photos Permission Status: $status');
+                        if (!status.isGranted) {
+                          status = await Permission.photos.request();
+                        }
+                        if (status.isGranted) {
+                          XFile? selectedImage = await _picker.pickImage(
+                              source: ImageSource.gallery);
+                          setState(() {
+                            _imageFile = selectedImage;
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Permission denied')),
+                          );
+                        }
+                      }
+                    },
+                    child: Text('Select Image'),
+                  ),
+                  if (_imageFile != null)
+                    Text('Image selected: ${_imageFile!.name}'),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Upload'),
+                  onPressed: () async {
+                    if (_imageFile != null &&
+                        _imageNameController.text.isNotEmpty) {
+                      await _uploadImageToFirebase(
+                          _imageFile!, _imageNameController.text);
+                      Navigator.of(context).pop();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content:
+                                Text('Please provide an image and a name')),
+                      );
+                    }
+                  },
+                ),
+                TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _uploadImageToFirebase(XFile imageFile, String imageName) async {
+    try {
+      final storageRef =
+          FirebaseStorage.instance.ref().child('$imageName');
+      await storageRef.putFile(File(imageFile.path));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Image uploaded successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload image: $e')),
+      );
+    }
+  }
+
+  void _showErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text('Wrong password!'),
+          actions: [
+            TextButton(
+              child: Text('Retry'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _showPasswordDialog(context);
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget heading() {

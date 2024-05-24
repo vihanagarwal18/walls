@@ -58,6 +58,10 @@ dependencies:
   fluttertoast: ^8.2.4
   google_fonts: ^4.0.4
   universal_html: ^2.0.8
+  firebase_storage: ^11.6.0
+  image_picker: ^1.0.8
+  file_picker: ^8.0.0+1
+  firebase_auth: ^4.16.0
 
 
 dev_dependencies:
@@ -70,8 +74,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  firebase_storage: ^11.6.0
-  firebase_core: ^2.24.2
+  # firebase_storage: ^11.7.6
+  # firebase_core: ^2.24.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
