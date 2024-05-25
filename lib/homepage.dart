@@ -17,6 +17,7 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_database/firebase_database.dart';
 // This provides the kIsWeb constant
 
 class Homepage extends StatefulWidget {
@@ -28,15 +29,18 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   List<String> images_list = [];
+  List<String> images_list_length = [];
   bool ww = false;
   // var list1 = ['Know the Developers', 'Vihan Agarwal', 'Gauransh Sharma'];
   // var list2 = [];
+  late DatabaseReference dbRef; // for name adding in realtime database
 
   final _advancedDrawerController = AdvancedDrawerController();
   @override
   void initState() {
     getItemList();
     super.initState();
+    dbRef = FirebaseDatabase.instance.ref().child('names');
   }
 
   @override
@@ -550,11 +554,11 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-
   Future<void> _uploadImageToFirebase(XFile imageFile, String imageName) async {
     try {
       // Check if the file is of type image/png using mimeType and file extension
-      if (imageFile.mimeType != 'image/png' && !imageFile.name.endsWith('.png')) {
+      if (imageFile.mimeType != 'image/png' &&
+          !imageFile.name.endsWith('.png')) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Please upload a PNG image')),
         );
@@ -568,11 +572,65 @@ class _HomepageState extends State<Homepage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Image uploaded successfully')),
       );
+
+      // Add the image name to the Firebase Realtime Database
+      await _addImageNameToDatabase(imageName);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to upload image: $e')),
       );
     }
+  }
+
+  Future<void> _addImageNameToDatabase(String imageName) async {
+    // int nextnumber;
+    // String url =
+    //     // "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+    //     "https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
+    // var response = await http.get(Uri.parse(url));
+    // if (response.statusCode == 200) {
+    //   var jsonData = jsonDecode(response.body) as List<dynamic>;
+    //   List<String> aff = [];
+    //   for (var item in jsonData) {
+    //     // Check if 'pic' is not null before using it
+    //     if (item['pic'] != null) {
+    //       String name = item['pic'];
+    //       aff.insert(0, name);
+    //       //aff.add(name);
+    //     }
+    //   }
+    //   setState(() {
+    //     images_list_length = aff;
+    //   });
+    // } else {
+    //   print("failed to fetched realtime database");
+    // }
+    // nextnumber = images_list_length.length;
+    Map<String, String> names = {
+      'pic': '$imageName.png',
+    };
+
+    dbRef.push().set(names);
+
+    // final databaseRef = FirebaseDatabase(
+    //   databaseURL:
+    //       'https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app/names.json',
+    // ).reference().child('names');
+
+    // final snapshot = await databaseRef.get();
+
+    // if (snapshot.exists) {
+    //   final data = snapshot.value as Map<dynamic, dynamic>;
+    //   final nextNumber = data.keys
+    //           .map((key) => int.parse(key.toString()))
+    //           .reduce((a, b) => a > b ? a : b) +
+    //       1;
+    //   await databaseRef
+    //       .child(nextNumber.toString())
+    //       .set({'pic': '$imageName.png'});
+    // } else {
+    //   await databaseRef.child('1').set({'pic': '$imageName.png'});
+    // }
   }
 
   void _showErrorDialog(BuildContext context) {
