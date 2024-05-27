@@ -455,104 +455,174 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  void _showSuccessDialog(BuildContext context) {
-    final TextEditingController _imageNameController = TextEditingController();
-    final ImagePicker _picker = ImagePicker();
-    XFile? _imageFile;
+  // void _showSuccessDialog(BuildContext context) {
+  //   final TextEditingController _imageNameController = TextEditingController();
+  //   final ImagePicker _picker = ImagePicker();
+  //   XFile? _imageFile;
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text('Success'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: _imageNameController,
-                    decoration: InputDecoration(hintText: "Enter image name"),
-                  ),
-                  Padding(padding: EdgeInsets.all(2)),
-                  ElevatedButton(
-                    onPressed: () async {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return StatefulBuilder(
+  //         builder: (context, setState) {
+  //           return AlertDialog(
+  //             title: Text('Success'),
+  //             content: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 TextField(
+  //                   controller: _imageNameController,
+  //                   decoration: InputDecoration(hintText: "Enter image name"),
+  //                 ),
+  //                 Padding(padding: EdgeInsets.all(2)),
+  //                 ElevatedButton(
+  //                   onPressed: () async {
+  //                     if (Platform.isAndroid || Platform.isIOS) {
+  //                       var status = Platform.isAndroid
+  //                           ? await Permission.manageExternalStorage.status
+  //                           : await Permission.photos.status;
+  //                       print('Permission Status: $status');
+  //                       if (!status.isGranted) {
+  //                         status = Platform.isAndroid
+  //                             ? await Permission.manageExternalStorage.request()
+  //                             : await Permission.photos.request();
+  //                       }
+  //                       if (status.isGranted) {
+  //                         XFile? selectedImage = await _picker.pickImage(
+  //                             source: ImageSource.gallery);
+  //                         setState(() {
+  //                           _imageFile = selectedImage;
+  //                         });
+  //                       } else {
+  //                         ScaffoldMessenger.of(context).showSnackBar(
+  //                           SnackBar(content: Text('Permission denied')),
+  //                         );
+  //                       }
+  //                     }
+  //                   },
+  //                   child: Text('Select Image'),
+  //                 ),
+  //                 if (_imageFile != null)
+  //                   Text('Image selected: ${_imageFile!.name}'),
+  //               ],
+  //             ),
+  //             actions: [
+  //               TextButton(
+  //                 child: Text('Upload'),
+  //                 onPressed: () async {
+  //                   if (_imageFile != null &&
+  //                       _imageNameController.text.isNotEmpty) {
+  //                     await _uploadImageToFirebase(
+  //                         _imageFile!, _imageNameController.text);
+  //                     Navigator.of(context).pop();
+  //                   } else {
+  //                     ScaffoldMessenger.of(context).showSnackBar(
+  //                       SnackBar(
+  //                           content:
+  //                               Text('Please provide an image and a name')),
+  //                     );
+  //                   }
+  //                 },
+  //               ),
+  //               TextButton(
+  //                 child: Text('Cancel'),
+  //                 onPressed: () {
+  //                   Navigator.of(context).pop();
+  //                 },
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+  void _showSuccessDialog(BuildContext context) {
+  final TextEditingController _imageNameController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  XFile? _imageFile;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text('Success'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _imageNameController,
+                  decoration: InputDecoration(hintText: "Enter image name"),
+                ),
+                Padding(padding: EdgeInsets.all(2)),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (Platform.isAndroid || Platform.isIOS) {
+                      PermissionStatus status;
                       if (Platform.isAndroid) {
-                        var status =
-                            await Permission.manageExternalStorage.status;
-                        print(
-                            'Manage External Storage Permission Status: $status');
+                        status = await Permission.manageExternalStorage.status;
                         if (!status.isGranted) {
-                          status =
-                              await Permission.manageExternalStorage.request();
-                        }
-                        if (status.isGranted) {
-                          XFile? selectedImage = await _picker.pickImage(
-                              source: ImageSource.gallery);
-                          setState(() {
-                            _imageFile = selectedImage;
-                          });
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Permission denied')),
-                          );
+                          status = await Permission.manageExternalStorage.request();
                         }
                       } else {
-                        var status = await Permission.photos.status;
-                        print('Photos Permission Status: $status');
+                        status = await Permission.photos.status;
                         if (!status.isGranted) {
                           status = await Permission.photos.request();
                         }
-                        if (status.isGranted) {
-                          XFile? selectedImage = await _picker.pickImage(
-                              source: ImageSource.gallery);
-                          setState(() {
-                            _imageFile = selectedImage;
-                          });
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Permission denied')),
-                          );
-                        }
                       }
-                    },
-                    child: Text('Select Image'),
-                  ),
-                  if (_imageFile != null)
-                    Text('Image selected: ${_imageFile!.name}'),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  child: Text('Upload'),
-                  onPressed: () async {
-                    if (_imageFile != null &&
-                        _imageNameController.text.isNotEmpty) {
-                      await _uploadImageToFirebase(
-                          _imageFile!, _imageNameController.text);
-                      Navigator.of(context).pop();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content:
-                                Text('Please provide an image and a name')),
-                      );
+
+                      if (status.isGranted) {
+                        XFile? selectedImage = await _picker.pickImage(
+                            source: ImageSource.gallery);
+                        setState(() {
+                          _imageFile = selectedImage;
+                        });
+                      } else if (status.isPermanentlyDenied) {
+                        openAppSettings();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Permission denied')),
+                        );
+                      }
                     }
                   },
+                  child: Text('Select Image'),
                 ),
-                TextButton(
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
+                if (_imageFile != null)
+                  Text('Image selected: ${_imageFile!.name}'),
               ],
-            );
-          },
-        );
-      },
-    );
-  }
+            ),
+            actions: [
+              TextButton(
+                child: Text('Upload'),
+                onPressed: () async {
+                  if (_imageFile != null &&
+                      _imageNameController.text.isNotEmpty) {
+                    await _uploadImageToFirebase(
+                        _imageFile!, _imageNameController.text);
+                    Navigator.of(context).pop();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please provide an image and a name')),
+                    );
+                  }
+                },
+              ),
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
 
   Future<void> _uploadImageToFirebase(XFile imageFile, String imageName) async {
     try {

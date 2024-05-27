@@ -18,30 +18,41 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Check if Firebase is already initialized
+  if (Firebase.apps.isEmpty) {
+    try {
+      await Firebase.initializeApp(
+        name: 'walls',
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (e) {
+      print('Firebase initialization error: $e');
+    }
+  }
 
-  await Firebase.initializeApp(
-    // name: 'trywallsnow',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   if (!kIsWeb && Platform.isAndroid) {
     await FirebaseApi().initNotifications();
   }
+  
   await Hive.initFlutter();
   await Hive.openBox<bool>('likes');
+  
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
   runApp(ProviderScope(
-      child: MaterialApp(
-    title: "Walls",
-    debugShowCheckedModeBanner: false,
-    //home: Set_as_Wallpaper(),
-    navigatorKey: navigatorKey,
-    routes: {
-      '/home': (context) => Homepage(),
-    },
-    home: Homepage(),
-  )));
+    child: MaterialApp(
+      title: "Walls",
+      debugShowCheckedModeBanner: false,
+      navigatorKey: navigatorKey,
+      routes: {
+        '/home': (context) => Homepage(),
+      },
+      home: Homepage(),
+    ),
+  ));
 }
+
