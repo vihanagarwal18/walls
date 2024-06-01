@@ -123,11 +123,7 @@ class _HomepageState extends State<Homepage> {
                                               children: [
                                                 TextButton(
                                                   onPressed: () async {
-                                                    _launchURL(
-                                                        'https://github.com/vihanagarwal18',
-                                                        'https',
-                                                        'github.com',
-                                                        '/vihanagarwal18');
+                                                    _launchURL('https://github.com/vihanagarwal18');
                                                   },
                                                   child: Row(
                                                     children: [
@@ -153,11 +149,7 @@ class _HomepageState extends State<Homepage> {
                                                 ),
                                                 TextButton(
                                                   onPressed: () async {
-                                                    _launchURL(
-                                                        "https://github.com/gauransh18",
-                                                        'https',
-                                                        'github.com',
-                                                        '/gauransh18');
+                                                    _launchURL('https://github.com/gauransh18');
                                                   },
                                                   child: Row(
                                                     children: [
@@ -242,8 +234,7 @@ class _HomepageState extends State<Homepage> {
                   255, 17, 17, 17), // Match the drawer's background color
               child: GestureDetector(
                 onTap: () async {
-                  _launchURL('https://github.com/vihanagarwal18/walls', 'https',
-                      'github.com', '/vihanagarwal18/walls');
+                  _launchURL('https://github.com/vihanagarwal18/walls');
                 },
                 child: Text(
                   "Github • V1.0",
@@ -720,19 +711,13 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Future<void> _launchURL(
-      String url, String scheme, String host, String path) async {
-    final Uri uri = Uri(scheme: scheme, host: host, path: path);
-    if (Platform.isAndroid) {
-      if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-        throw 'Could not launch $url';
-      }
-    }
-
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
     }
   }
 }
+
