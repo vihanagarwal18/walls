@@ -237,7 +237,7 @@ class _HomepageState extends State<Homepage> {
                   _launchURL('https://github.com/vihanagarwal18/walls');
                 },
                 child: Text(
-                  "Github • V1.0",
+                  "Github • V2.0",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.blue,
