@@ -31,41 +31,36 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_staggered_grid_view: ^0.7.0
+  firebase_core: ^2.27.1
+  firebase_auth: ^4.17.9
+  firebase_database: ^10.4.0
+  firebase_storage: ^11.6.0
+  firebase_messaging: ^14.7.10
+  flutter_riverpod: ^2.4.9
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
   path_provider: ^2.1.2
   permission_handler: ^11.1.0
   like_button: ^2.0.5
-  hive: ^2.0.4
-  hive_flutter: ^1.1.0
   dio: ^5.4.0
-  gallery_saver: ^2.0.3
-  wallpaper: ^1.1.1
+  gallery_saver: ^2.3.2  # Updated to null-safe version
   flutter_cache_manager: ^3.3.1
   flutter_advanced_drawer: ^1.3.5
   animated_text_kit: ^4.2.2
-  cached_network_image: ^3.2.0
+  cached_network_image: ^3.3.1
   expandable: ^5.0.1
-  firebase_messaging: ^14.7.10
-  flutter_riverpod: ^1.0.0
   url_launcher: ^6.2.4
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  firebase_core: ^2.24.2
-  firebase_database: ^10.4.0
-  rename_app: ^1.3.1
   async_wallpaper: ^2.0.3
   fluttertoast: ^8.2.4
-  google_fonts: ^4.0.4
+  google_fonts: ^4.0.4  # Downgraded to be compatible with gallery_saver
   universal_html: ^2.0.8
-  firebase_storage: ^11.6.0
   image_picker: ^1.0.8
   file_picker: ^8.0.0+1
-  firebase_auth: ^4.16.0
-
-
-
-  web: ^0.2.0
+  cupertino_icons: ^1.0.2
+  rename_app: ^1.3.1
+  web: ^0.5.1
+  cloud_functions: ^4.6.9
+  cloud_firestore: ^4.15.9
 
 dev_dependencies:
   flutter_test:
@@ -77,8 +72,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
-  # firebase_storage: ^11.7.6
-  # firebase_core: ^2.24.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

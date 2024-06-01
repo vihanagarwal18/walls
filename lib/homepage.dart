@@ -18,6 +18,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:mime/mime.dart';
 // This provides the kIsWeb constant
 
 class Homepage extends StatefulWidget {
@@ -391,27 +393,27 @@ class _HomepageState extends State<Homepage> {
   }
 
   void getItemList() async {
-    // print("Fetching started");
     String url =
-        // "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
         "https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
-    var response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      var jsonData = jsonDecode(response.body) as List<dynamic>;
-      List<String> aff = [];
-      for (var item in jsonData) {
-        // Check if 'pic' is not null before using it
-        if (item['pic'] != null) {
-          String name = item['pic'];
-          aff.insert(0, name);
-          //aff.add(name);
-        }
+    try {
+      var response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(response.body) as Map<String, dynamic>;
+        List<String> aff = [];
+        jsonData.forEach((key, value) {
+          if (value['pic'] != null) {
+            String name = value['pic'];
+            aff.insert(0, name);
+          }
+        });
+        setState(() {
+          images_list = aff;
+        });
+      } else {
+        print("Failed to fetch data. Status code: ${response.statusCode}");
       }
-      setState(() {
-        images_list = aff;
-      });
-    } else {
-      print("Failed to fetch data. Status code: ${response.statusCode}");
+    } catch (e) {
+      print("Error fetching data: $e");
     }
   }
 
@@ -440,7 +442,7 @@ class _HomepageState extends State<Homepage> {
             TextButton(
               child: Text('Submit'),
               onPressed: () {
-                if (_passwordController.text == "12345678") {
+                if (_passwordController.text == "1819") {
                   Navigator.of(context).pop();
                   _showSuccessDialog(context);
                 } else {
@@ -455,174 +457,147 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // void _showSuccessDialog(BuildContext context) {
-  //   final TextEditingController _imageNameController = TextEditingController();
-  //   final ImagePicker _picker = ImagePicker();
-  //   XFile? _imageFile;
-
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return StatefulBuilder(
-  //         builder: (context, setState) {
-  //           return AlertDialog(
-  //             title: Text('Success'),
-  //             content: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 TextField(
-  //                   controller: _imageNameController,
-  //                   decoration: InputDecoration(hintText: "Enter image name"),
-  //                 ),
-  //                 Padding(padding: EdgeInsets.all(2)),
-  //                 ElevatedButton(
-  //                   onPressed: () async {
-  //                     if (Platform.isAndroid || Platform.isIOS) {
-  //                       var status = Platform.isAndroid
-  //                           ? await Permission.manageExternalStorage.status
-  //                           : await Permission.photos.status;
-  //                       print('Permission Status: $status');
-  //                       if (!status.isGranted) {
-  //                         status = Platform.isAndroid
-  //                             ? await Permission.manageExternalStorage.request()
-  //                             : await Permission.photos.request();
-  //                       }
-  //                       if (status.isGranted) {
-  //                         XFile? selectedImage = await _picker.pickImage(
-  //                             source: ImageSource.gallery);
-  //                         setState(() {
-  //                           _imageFile = selectedImage;
-  //                         });
-  //                       } else {
-  //                         ScaffoldMessenger.of(context).showSnackBar(
-  //                           SnackBar(content: Text('Permission denied')),
-  //                         );
-  //                       }
-  //                     }
-  //                   },
-  //                   child: Text('Select Image'),
-  //                 ),
-  //                 if (_imageFile != null)
-  //                   Text('Image selected: ${_imageFile!.name}'),
-  //               ],
-  //             ),
-  //             actions: [
-  //               TextButton(
-  //                 child: Text('Upload'),
-  //                 onPressed: () async {
-  //                   if (_imageFile != null &&
-  //                       _imageNameController.text.isNotEmpty) {
-  //                     await _uploadImageToFirebase(
-  //                         _imageFile!, _imageNameController.text);
-  //                     Navigator.of(context).pop();
-  //                   } else {
-  //                     ScaffoldMessenger.of(context).showSnackBar(
-  //                       SnackBar(
-  //                           content:
-  //                               Text('Please provide an image and a name')),
-  //                     );
-  //                   }
-  //                 },
-  //               ),
-  //               TextButton(
-  //                 child: Text('Cancel'),
-  //                 onPressed: () {
-  //                   Navigator.of(context).pop();
-  //                 },
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
   void _showSuccessDialog(BuildContext context) {
-  final TextEditingController _imageNameController = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
-  XFile? _imageFile;
+    final TextEditingController _imageNameController = TextEditingController();
+    XFile? _imageFile;
+    PlatformFile? _webFile;
 
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return AlertDialog(
-            title: Text('Success'),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: _imageNameController,
-                  decoration: InputDecoration(hintText: "Enter image name"),
-                ),
-                Padding(padding: EdgeInsets.all(2)),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (Platform.isAndroid || Platform.isIOS) {
-                      PermissionStatus status;
-                      if (Platform.isAndroid) {
-                        status = await Permission.manageExternalStorage.status;
-                        if (!status.isGranted) {
-                          status = await Permission.manageExternalStorage.request();
-                        }
-                      } else {
-                        status = await Permission.photos.status;
-                        if (!status.isGranted) {
-                          status = await Permission.photos.request();
-                        }
-                      }
-
-                      if (status.isGranted) {
-                        XFile? selectedImage = await _picker.pickImage(
-                            source: ImageSource.gallery);
-                        setState(() {
-                          _imageFile = selectedImage;
-                        });
-                      } else if (status.isPermanentlyDenied) {
-                        openAppSettings();
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Permission denied')),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text('Success'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: _imageNameController,
+                    decoration: InputDecoration(hintText: "Enter image name"),
+                  ),
+                  Padding(padding: EdgeInsets.all(2)),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (kIsWeb) {
+                        FilePickerResult? result =
+                            await FilePicker.platform.pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: ['png'],
                         );
+                        if (result != null) {
+                          setState(() {
+                            _webFile = result.files.first;
+                          });
+                        }
+                      } else {
+                        PermissionStatus status;
+                        if (Platform.isAndroid) {
+                          status =
+                              await Permission.manageExternalStorage.status;
+                          if (!status.isGranted) {
+                            status = await Permission.manageExternalStorage
+                                .request();
+                          }
+                        } else {
+                          status = await Permission.photos.status;
+                          if (!status.isGranted) {
+                            status = await Permission.photos.request();
+                          }
+                        }
+
+                        if (status.isGranted) {
+                          XFile? selectedImage = await ImagePicker()
+                              .pickImage(source: ImageSource.gallery);
+                          setState(() {
+                            _imageFile = selectedImage;
+                          });
+                        } else if (status.isPermanentlyDenied) {
+                          openAppSettings();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Permission denied')),
+                          );
+                        }
                       }
+                    },
+                    child: Text('Select Image'),
+                  ),
+                  if (_imageFile != null)
+                    Text('Image selected: ${_imageFile!.name}'),
+                  if (_webFile != null)
+                    Text('Image selected: ${_webFile!.name}'),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  child: Text('Upload'),
+                  onPressed: () async {
+                    if ((kIsWeb &&
+                            _webFile != null &&
+                            _imageNameController.text.isNotEmpty) ||
+                        (!kIsWeb &&
+                            _imageFile != null &&
+                            _imageNameController.text.isNotEmpty)) {
+                      if (kIsWeb) {
+                        await _uploadImageToFirebaseWeb(
+                            _webFile!, _imageNameController.text);
+                      } else {
+                        await _uploadImageToFirebase(
+                            _imageFile!, _imageNameController.text);
+                      }
+                      Navigator.of(context).pop();
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content:
+                                Text('Please provide an image and a name')),
+                      );
                     }
                   },
-                  child: Text('Select Image'),
                 ),
-                if (_imageFile != null)
-                  Text('Image selected: ${_imageFile!.name}'),
-              ],
-            ),
-            actions: [
-              TextButton(
-                child: Text('Upload'),
-                onPressed: () async {
-                  if (_imageFile != null &&
-                      _imageNameController.text.isNotEmpty) {
-                    await _uploadImageToFirebase(
-                        _imageFile!, _imageNameController.text);
+                TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
                     Navigator.of(context).pop();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Please provide an image and a name')),
-                    );
-                  }
-                },
-              ),
-              TextButton(
-                child: Text('Cancel'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _uploadImageToFirebaseWeb(
+      PlatformFile webFile, String imageName) async {
+    try {
+      // Check if the file is of type image/png using mimeType and file extension
+      if (lookupMimeType(webFile.name) != 'image/png' &&
+          !webFile.name.endsWith('.png')) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please upload a PNG image')),
+        );
+        return;
+      }
+
+      final storageRef = FirebaseStorage.instance.ref().child('$imageName.png');
+      final metadata = SettableMetadata(contentType: 'image/png');
+
+      await storageRef.putData(webFile.bytes!, metadata);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Image uploaded successfully')),
       );
-    },
-  );
-}
+
+      // Add the image name to the Firebase Realtime Database
+      await _addImageNameToDatabase(imageName);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to upload image: $e')),
+      );
+    }
+  }
 
   Future<void> _uploadImageToFirebase(XFile imageFile, String imageName) async {
     try {
@@ -653,54 +628,11 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<void> _addImageNameToDatabase(String imageName) async {
-    // int nextnumber;
-    // String url =
-    //     // "https://walls-1809-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
-    //     "https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app/names.json";
-    // var response = await http.get(Uri.parse(url));
-    // if (response.statusCode == 200) {
-    //   var jsonData = jsonDecode(response.body) as List<dynamic>;
-    //   List<String> aff = [];
-    //   for (var item in jsonData) {
-    //     // Check if 'pic' is not null before using it
-    //     if (item['pic'] != null) {
-    //       String name = item['pic'];
-    //       aff.insert(0, name);
-    //       //aff.add(name);
-    //     }
-    //   }
-    //   setState(() {
-    //     images_list_length = aff;
-    //   });
-    // } else {
-    //   print("failed to fetched realtime database");
-    // }
-    // nextnumber = images_list_length.length;
     Map<String, String> names = {
       'pic': '$imageName.png',
     };
 
     dbRef.push().set(names);
-
-    // final databaseRef = FirebaseDatabase(
-    //   databaseURL:
-    //       'https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app/names.json',
-    // ).reference().child('names');
-
-    // final snapshot = await databaseRef.get();
-
-    // if (snapshot.exists) {
-    //   final data = snapshot.value as Map<dynamic, dynamic>;
-    //   final nextNumber = data.keys
-    //           .map((key) => int.parse(key.toString()))
-    //           .reduce((a, b) => a > b ? a : b) +
-    //       1;
-    //   await databaseRef
-    //       .child(nextNumber.toString())
-    //       .set({'pic': '$imageName.png'});
-    // } else {
-    //   await databaseRef.child('1').set({'pic': '$imageName.png'});
-    // }
   }
 
   void _showErrorDialog(BuildContext context) {

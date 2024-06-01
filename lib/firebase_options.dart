@@ -25,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -52,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '58298262525',
     projectId: 'trywallsnow',
     authDomain: 'trywallsnow.firebaseapp.com',
+    databaseURL: 'https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'trywallsnow.appspot.com',
   );
 
@@ -60,6 +55,7 @@ class DefaultFirebaseOptions {
     appId: '1:58298262525:android:3faf3db599960490a96f94',
     messagingSenderId: '58298262525',
     projectId: 'trywallsnow',
+    databaseURL: 'https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'trywallsnow.appspot.com',
   );
 
@@ -68,7 +64,29 @@ class DefaultFirebaseOptions {
     appId: '1:58298262525:ios:3edbde6e1bd9fdefa96f94',
     messagingSenderId: '58298262525',
     projectId: 'trywallsnow',
+    databaseURL: 'https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'trywallsnow.appspot.com',
     iosBundleId: 'com.gauranshsharma.walls',
   );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAB0Z-3HJvAg9Pus5UtRr1mtucsXOWDAF8',
+    appId: '1:58298262525:ios:61cd7e8c3d0e6d62a96f94',
+    messagingSenderId: '58298262525',
+    projectId: 'trywallsnow',
+    databaseURL: 'https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'trywallsnow.appspot.com',
+    iosBundleId: 'com.example.wallpaper',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyA1DtetnP1nL8dOZ-bA6eUEKkFe1nZbido',
+    appId: '1:58298262525:web:b9ba4b43c65d440ea96f94',
+    messagingSenderId: '58298262525',
+    projectId: 'trywallsnow',
+    authDomain: 'trywallsnow.firebaseapp.com',
+    databaseURL: 'https://trywallsnow-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'trywallsnow.appspot.com',
+  );
+
 }

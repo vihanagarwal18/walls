@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive/hive.dart';
 
@@ -7,10 +8,23 @@ final likeStateProvider = StateNotifierProvider.family<LikeStateNotifier, bool, 
 
 class LikeStateNotifier extends StateNotifier<bool> {
   final String imageName;
-  LikeStateNotifier(this.imageName) : super(Hive.box<bool>('likes').get(imageName) ?? false);
+  LikeStateNotifier(this.imageName) : super(false) {
+    _initState();
+  }
+
+  Future<void> _initState() async {
+    if (!Hive.isBoxOpen('likes')) {
+      await Hive.openBox<bool>('likes');
+    }
+    final box = Hive.box<bool>('likes');
+    state = box.get(imageName) ?? false;
+  }
 
   void toggleLike() {
     state = !state;
-    Hive.box<bool>('likes').put(imageName, state);
+    if (Hive.isBoxOpen('likes')) {
+      final box = Hive.box<bool>('likes');
+      box.put(imageName, state);
+    }
   }
 }

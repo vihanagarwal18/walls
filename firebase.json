@@ -1,16 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"hosting":{"public":"build/web","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]},"flutter":{"platforms":{"android":{"default":{"projectId":"trywallsnow","appId":"1:58298262525:android:3faf3db599960490a96f94","fileOutput":"android/app/google-services.json"}},"ios":{"default":{"projectId":"trywallsnow","appId":"1:58298262525:ios:3edbde6e1bd9fdefa96f94","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"macos":{"default":{"projectId":"trywallsnow","appId":"1:58298262525:ios:61cd7e8c3d0e6d62a96f94","uploadDebugSymbols":false,"fileOutput":"macos/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"trywallsnow","configurations":{"android":"1:58298262525:android:3faf3db599960490a96f94","ios":"1:58298262525:ios:3edbde6e1bd9fdefa96f94","macos":"1:58298262525:ios:61cd7e8c3d0e6d62a96f94","web":"1:58298262525:web:67bc4cc9d2bd740aa96f94","windows":"1:58298262525:web:b9ba4b43c65d440ea96f94"}}}}}}
